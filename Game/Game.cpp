@@ -12,6 +12,9 @@
 #include "drawdata.h"
 #include "DrawData2D.h"
 
+#include "Boid.h"
+#include "BoidManager.h"
+
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
@@ -104,13 +107,13 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_DD->m_light = m_light;
 
 	//add random content to show the various what you've got here
-	Terrain* terrain = new Terrain("table.cmo", _pd3dDevice, m_fxFactory, Vector3(100.0f, 0.0f, 100.0f), 0.0f, 0.0f, 0.0f, 0.25f * Vector3::One);
-	m_GameObjects.push_back(terrain);
+	//Terrain* terrain = new Terrain("table.cmo", _pd3dDevice, m_fxFactory, Vector3(100.0f, 0.0f, 100.0f), 0.0f, 0.0f, 0.0f, 0.25f * Vector3::One);
+	//m_GameObjects.push_back(terrain);
 
 	//add some stuff to show off
 
-	FileVBGO* terrainBox = new FileVBGO("../Assets/terrainTex.txt", _pd3dDevice);
-	m_GameObjects.push_back(terrainBox);
+	// FileVBGO* terrainBox = new FileVBGO("../Assets/terrainTex.txt", _pd3dDevice);
+	//m_GameObjects.push_back(terrainBox);
 
 	FileVBGO* Box = new FileVBGO("../Assets/cube.txt", _pd3dDevice);
 	m_GameObjects.push_back(Box);
@@ -119,7 +122,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	Box->SetScale(20.0f);
 
 	//L-system like tree
-	m_GameObjects.push_back(new Tree(4, 4, .6f, 10.0f *Vector3::Up, XM_PI/6.0f, "JEMINA vase -up.cmo", _pd3dDevice, m_fxFactory));
+	//m_GameObjects.push_back(new Tree(4, 4, .6f, 10.0f *Vector3::Up, XM_PI/6.0f, "JEMINA vase -up.cmo", _pd3dDevice, m_fxFactory));
 
 	VBCube* cube = new VBCube();
 	cube->init(11, _pd3dDevice);
@@ -159,15 +162,19 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_GameObjects.push_back(VBMC);
 
 
-	//example basic 2D stuff
-	ImageGO2D* logo = new ImageGO2D("logo_small", _pd3dDevice);
-	logo->SetPos(200.0f * Vector2::One);
-	m_GameObject2Ds.push_back(logo);
+	////example basic 2D stuff
+	//ImageGO2D* logo = new ImageGO2D("logo_small", _pd3dDevice);
+	//logo->SetPos(200.0f * Vector2::One);
+	//m_GameObject2Ds.push_back(logo);
 
-	TextGO2D* text = new TextGO2D("Test Text");
-	text->SetPos(Vector2(100, 10));
-	text->SetColour(Color((float*)&Colors::Yellow));
-	m_GameObject2Ds.push_back(text);
+	//TextGO2D* text = new TextGO2D("Test Text");
+	//text->SetPos(Vector2(100, 10));
+	//text->SetColour(Color((float*)&Colors::Yellow));
+	//m_GameObject2Ds.push_back(text);
+
+	BoidManager* pBoidManager = new BoidManager(100, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
+	m_GameObjects.push_back(pBoidManager);
+
 };
 
 

@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Bird\BirdModelV1.fbx" />
+    <MeshContentTask Include="Models\Low poly bird\lowpoly bird.FBX" />
     <MeshContentTask Include="Table\table.FBX" />
     <MeshContentTask Include="Vase\JEMINA vase -up.fbx" />
   </ItemGroup>

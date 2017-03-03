@@ -35,6 +35,9 @@
     <MeshContentTask Include="Vase\JEMINA vase -up.fbx">
       <Filter>Models</Filter>
     </MeshContentTask>
+    <MeshContentTask Include="Models\Low poly bird\lowpoly bird.FBX">
+      <Filter>Models</Filter>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
     <Text Include="baseline.txt">
