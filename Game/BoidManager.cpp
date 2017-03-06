@@ -56,6 +56,7 @@ void BoidManager::Tick(GameData * _GD)
 	{
 		if ((*it)->isAlive())
 		{
+			(*it)->MovePos(Vector3::Forward / 10);
 			(*it)->Tick(_GD);
 		}
 	}
