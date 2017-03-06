@@ -30,8 +30,8 @@ void BoidManager::Tick(GameData * _GD)
 	float randY = rand() % 80 - 40;
 
 
-	//if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
-	//{
+	if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
+	{
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 		{
 			if (!(*it)->isAlive())
@@ -50,7 +50,7 @@ void BoidManager::Tick(GameData * _GD)
 		}
 
 		
-	//}
+	}
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
@@ -58,7 +58,7 @@ void BoidManager::Tick(GameData * _GD)
 		{
 			if (boidsSpawned > 1)
 			{
-				(*it)->MovePos(Cohesion((*it)));
+				(*it)->MovePos(Seperation((*it)));
 			}
 			(*it)->Tick(_GD);
 		}
@@ -77,22 +77,57 @@ void BoidManager::Draw(DrawData * _DD)
 }
 
 Vector3 BoidManager::Cohesion(Boid* _boid)
-{
-	
+{	
 	Vector3 CofM = Vector3::Zero;
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it) != _boid)
-		{
-			
+		{			
 			CofM += (*it)->GetPos();
 		}		
 	}
 
 	CofM = CofM / (boidsSpawned - 1);
 
-	cohesion_rule = (CofM - _boid->GetPos()) / 100;
+	cohesion_rule = (CofM - _boid->GetPos()) / 300;
 
 	return cohesion_rule;
+}
+
+Vector3 BoidManager::Seperation(Boid * _boid)
+{
+	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
+	{
+		if ((*it) != _boid)
+		{
+			/*if ( ( ( (*it)->GetPos().x - _boid->GetPos().x) < 5) && ( ( (*it)->GetPos().y - _boid->GetPos().y) < 5) && ( ( (*it)->GetPos().z - _boid->GetPos().z) < 5))*/
+
+			if((fabs((*it)->GetPos().x - _boid->GetPos().x)) < 10)
+			{
+				seperation_rule.x -= ((*it)->GetPos().x - _boid->GetPos().x);
+			}
+
+			//if ((((*it)->GetPos().x - _boid->GetPos().x) < 2))
+			//{
+			//	seperation_rule.x -= ((*it)->GetPos().x - _boid->GetPos().x);
+			//}
+
+			//if ((((*it)->GetPos().z - _boid->GetPos().z) < 2))
+			//{
+			//	seperation_rule.z -= ((*it)->GetPos().z - _boid->GetPos().z);
+			//}
+
+			//if ((((*it)->GetPos().y - _boid->GetPos().y) < 2))
+			//{
+			//	seperation_rule.y -= ((*it)->GetPos().y - _boid->GetPos().y);
+			//}
+		}
+	}
+	return seperation_rule / 10000000;
+}
+
+Vector3 BoidManager::Alignment(Boid * _boid)
+{
+	return alignment_rule;
 }

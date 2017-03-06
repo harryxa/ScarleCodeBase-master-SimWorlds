@@ -22,6 +22,12 @@ public:
 	Vector3 Cohesion(Boid* _boid);
 	Vector3 cohesion_rule = Vector3::Zero;
 
+	Vector3 Seperation(Boid* _boid);
+	Vector3 seperation_rule = Vector3::Zero;
+
+	Vector3 Alignment(Boid* _boid);
+	Vector3 alignment_rule = Vector3::Zero;
+
 	vector<Boid*> GetBoids() { return m_Boids; }
 
 private:
