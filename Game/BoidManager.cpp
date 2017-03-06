@@ -30,8 +30,8 @@ void BoidManager::Tick(GameData * _GD)
 	float randY = rand() % 80 - 40;
 
 
-	if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
-	{
+	//if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
+	//{
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 		{
 			if (!(*it)->isAlive())
@@ -50,13 +50,16 @@ void BoidManager::Tick(GameData * _GD)
 		}
 
 		
-	}
+	//}
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it)->isAlive())
 		{
-			(*it)->MovePos(Vector3::Forward / 10);
+			if (boidsSpawned > 1)
+			{
+				(*it)->MovePos(Cohesion((*it)));
+			}
 			(*it)->Tick(_GD);
 		}
 	}
@@ -71,4 +74,25 @@ void BoidManager::Draw(DrawData * _DD)
 			boid->Draw(_DD);
 		}
 	}
+}
+
+Vector3 BoidManager::Cohesion(Boid* _boid)
+{
+	
+	Vector3 CofM = Vector3::Zero;
+
+	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
+	{
+		if ((*it) != _boid)
+		{
+			
+			CofM += (*it)->GetPos();
+		}		
+	}
+
+	CofM = CofM / (boidsSpawned - 1);
+
+	cohesion_rule = (CofM - _boid->GetPos()) / 100;
+
+	return cohesion_rule;
 }
