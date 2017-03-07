@@ -22,7 +22,7 @@ void Boid::Tick(GameData * _GD)
 {
 	if (m_alive)
 	{
-		//m_pos += Vector3::Forward / 5;
+		//m_pos += Vector3::Forward / 30;
 		//Matrix scaleMat = Matrix::CreateScale(m_scale);
 		//Matrix rotTransMat = Matrix::CreateWorld(m_pos, Vector3::Forward, Vector3::Up);
 		//m_worldMat = m_fudge * scaleMat * rotTransMat;

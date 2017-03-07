@@ -26,7 +26,7 @@ public:
 	//Vector3 seperation_rule = Vector3::Zero;
 
 	Vector3 Alignment(Boid* _boid);
-	Vector3 alignment_rule = Vector3::Zero;
+	//Vector3 alignment_rule = Vector3::Zero;
 
 	Vector3 Rules(Vector3 _rule1, Vector3 _rule2, Vector3 _rule3);
 	Vector3 all_rules = Vector3::Zero;

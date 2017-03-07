@@ -58,7 +58,15 @@ void BoidManager::Tick(GameData * _GD)
 		{
 			if (boidsSpawned > 1)
 			{	
-				(*it)->MovePos((Seperation(*it) + Cohesion(*it)) * _GD->m_dt);
+				Vector3 v1, v2, v3;
+				v1 = Seperation(*it);
+				v2 = Cohesion(*it);
+				v3 = Alignment(*it);
+
+				(*it)->SetVel(((*it)->GetVel() + v1 + v2 + v3) * _GD->m_dt);
+				(*it)->MovePos((*it)->GetVel());
+
+				//(*it)->MovePos((Seperation(*it) + Cohesion(*it) + Alignment(*it)) * _GD->m_dt);
 				
 				
 				//(*it)->MovePos(Rules((*it)));
@@ -107,7 +115,7 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 	{
 		if ((*it) != _boid)
 		{
-			if (Vector3::Distance((*it)->GetPos(), _boid->GetPos()) < 5.0f )
+			if (Vector3::Distance((*it)->GetPos(), _boid->GetPos()) < 8.0f )
 			{
 				seperation_rule -= (((*it)->GetPos() - _boid->GetPos()) );
 			}
@@ -123,7 +131,19 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 
 Vector3 BoidManager::Alignment(Boid * _boid)
 {
-	return alignment_rule;
+	Vector3 alignment_rule = Vector3::Zero;
+
+	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
+	{
+		if ((*it) != _boid)
+		{
+			alignment_rule += (*it)->GetVel();
+		}
+	}
+	alignment_rule = (alignment_rule / (boidsSpawned - 1));
+
+
+	return ((alignment_rule - _boid->GetVel()));
 }
 
 Vector3 BoidManager::Rules(Vector3 _rule1, Vector3 _rule2, Vector3 _rule3)

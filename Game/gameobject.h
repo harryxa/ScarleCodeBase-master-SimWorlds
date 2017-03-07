@@ -36,6 +36,8 @@ public:
 	bool		IsPhysicsOn() { return m_physicsOn; }
 	float		GetDrag() { return m_drag; }
 
+	Vector3		GetVel() { return m_vel; }
+
 	//setters
 	void		SetPos(Vector3 _pos) { m_pos = _pos; }
 	void		MovePos(Vector3 _pos) { m_pos += _pos; }
@@ -52,6 +54,8 @@ public:
 	void		SetPhysicsOn(bool _physics) { m_physicsOn = _physics; }
 	void		TogglePhysics() { m_physicsOn = !m_physicsOn; }
 	void		SetDrag(float _drag) { m_drag = _drag; }
+
+	void		SetVel(Vector3 _vel) { m_vel = _vel; }
 
 
 protected:
