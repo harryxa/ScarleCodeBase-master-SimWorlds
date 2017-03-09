@@ -30,27 +30,29 @@ void BoidManager::Tick(GameData * _GD)
 	float randY = rand() % 80 - 40;
 
 
-	//if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
-	//{
+	if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
+	{
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 		{
 			if (!(*it)->isAlive())
 			{
-				(*it)->Spawn({ (float)(rand() % 90) - 50 , 10, (float)(rand() % 90) - 50 }); //make random number
+				(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50 }); //make random number
 
 				boidsSpawned++;
-			
-				cout << "X: " << (*it)->GetPos().x << endl;
-				cout << "Y: " << (*it)->GetPos().y << endl;
-				cout << "Z: " << (*it)->GetPos().z << endl;
-				cout << "spawned boid: " <<  boidsSpawned << endl << endl;
+
+				//cout << "X: " << (*it)->GetPos().x << endl;
+				//cout << "Y: " << (*it)->GetPos().y << endl;
+				//cout << "Z: " << (*it)->GetPos().z << endl;
+				//cout << "spawned boid: " <<  boidsSpawned << endl << endl;
+				
+				(*it)->MovePos(GetVel());
 				
 				break;
 			}
 		}
 
 		
-	//}
+	}
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
@@ -88,23 +90,24 @@ void BoidManager::Draw(DrawData * _DD)
 }
 
 Vector3 BoidManager::Cohesion(Boid* _boid)
-{	
-	Vector3 CofM = Vector3::Zero;
-	Vector3 cohesion_rule = Vector3::Zero;
-
+{
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
-		if ((*it) != _boid)
+		//cout << Vector3::Distance((*it)->GetPos(), _boid->GetPos()) << endl;
+
+		//cout << Vector3::Distance((*it)->GetPos(), _boid->GetPos()) << endl;
+		if (Vector3::Distance((*it)->GetPos(), _boid->GetPos()) < 20.0f)
 		{
-			CofM += (*it)->GetPos();				
-		}		
-	}
+			if ((*it) != _boid)
+			{
+				_boid->CofM += (*it)->GetPos();
 
-	CofM = CofM / (boidsSpawned - 1);
-
-	cohesion_rule = (CofM - _boid->GetPos());
-
-	return cohesion_rule / 5;
+			}			
+		}
+	}				
+	_boid->CofM = _boid->CofM / (boidsSpawned - 1);
+				_boid->cohesion_rule = (_boid->CofM - _boid->GetPos());
+	return _boid->cohesion_rule / 5;
 }
 
 Vector3 BoidManager::Seperation(Boid * _boid)
@@ -117,6 +120,8 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 		{
 			if (Vector3::Distance((*it)->GetPos(), _boid->GetPos()) < 8.0f )
 			{
+				//cout << Vector3::Distance((*it)->GetPos(), _boid->GetPos()) << endl;
+
 				seperation_rule -= (((*it)->GetPos() - _boid->GetPos()) );
 			}
 			//else if (Vector3::Distance((*it)->GetPos(), _boid->GetPos()) > 15.0f)
@@ -145,12 +150,4 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 
 	return ((alignment_rule - _boid->GetVel()));
 }
-
-Vector3 BoidManager::Rules(Vector3 _rule1, Vector3 _rule2, Vector3 _rule3)
-{
-	all_rules = _rule1 + _rule2 + _rule3;
-
-	return all_rules;
-}
-
 

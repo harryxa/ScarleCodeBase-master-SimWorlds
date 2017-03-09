@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CMOGO.h"
+#include "BoidManager.h"
 
 class Boid : public CMOGO
 {
@@ -14,6 +15,9 @@ public:
 	virtual void Draw(DrawData* _DD) override;
 
 	bool isAlive() { return m_alive; }
+
+	Vector3 CofM = Vector3::Zero;
+	Vector3 cohesion_rule = Vector3::Zero;
 
 protected:
 

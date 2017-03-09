@@ -39,3 +39,5 @@ void Boid::Draw(DrawData * _DD)
 		CMOGO::Draw(_DD);
 	}
 }
+
+
