@@ -40,6 +40,7 @@ void BoidManager::Tick(GameData * _GD)
 
 				boidsSpawned++;
 
+				(*it)->SetVel(Vector3(0, 0, 0));
 				break;
 			}
 		}		
@@ -57,21 +58,23 @@ void BoidManager::Tick(GameData * _GD)
 				v3 = Alignment(*it);
 				v4 = BoundPosition(*it);
 
-				
+				// * _GD->m_dt);	for use later
 
-				(*it)->SetVel(((*it)->GetVel() + v1 + v2 + v3));
+				//sets boid a velocity
+				(*it)->SetVel((*it)->GetVel() + v1 + v2 +v3 + v4);
+
+				//limits the speed of the boids
 				LimitSpeed(*it);
+
+				//moves the boids using velocity
 				(*it)->MovePos((*it)->GetVel());
-
-				
-
-				//(*it)->MovePos((Seperation(*it) + Cohesion(*it) + Alignment(*it)) * _GD->m_dt);				
-				
-				//(*it)->MovePos(Rules((*it)));
+								
 			}
 			(*it)->Tick(_GD);
-		}
+		}	
+		//(*it)->SetVel(Vector3::Zero);		
 	}
+
 }
 
 void BoidManager::Draw(DrawData * _DD)
@@ -138,9 +141,10 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	}
 	alignment_rule = (alignment_rule / (boidsSpawned - 1));
 
-	return ((alignment_rule - _boid->GetVel()));
+	return (alignment_rule - _boid->GetVel());
 }
 
+//limits the velocity of the boids
 void BoidManager::LimitSpeed(Boid * _boid)
 {
 	float vLimit = 0.4;
@@ -152,11 +156,12 @@ void BoidManager::LimitSpeed(Boid * _boid)
 	}
 }
 
+//sets the limits to which boids can move
 Vector3 BoidManager::BoundPosition(Boid * _boid)
 {
 
 	int Xmin = -150, Xmax = 150, Ymin = -150, Ymax = 150, Zmin= -150, Zmax = 150;
-	int i = 20;
+	int i = 100;
 	Vector3 bound_rule;
 
 	if (_boid->GetPos().x < Xmin)
