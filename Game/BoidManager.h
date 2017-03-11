@@ -22,12 +22,15 @@ public:
 	Vector3 Cohesion(Boid* _boid);
 	Vector3 Seperation(Boid* _boid);
 	Vector3 Alignment(Boid* _boid);
+	void LimitSpeed(Boid* _boid);
+	Vector3 BoundPosition(Boid* _boid);
+
 
 
 	vector<Boid*> GetBoids() { return m_Boids; }
 
-	int		GetBoidsSpawned() { return m_boidsSpawned; }
-	void	SetBoidsSpawned(int _boidsSpawned) { m_boidsSpawned = _boidsSpawned; }
+	//int	GetBoidsSpawned() { return m_boidsSpawned; }
+	//void	SetBoidsSpawned(int _boidsSpawned) { m_boidsSpawned = _boidsSpawned; }
 
 protected:
 

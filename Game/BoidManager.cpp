@@ -30,29 +30,20 @@ void BoidManager::Tick(GameData * _GD)
 	float randY = rand() % 80 - 40;
 
 
-	if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
-	{
+	//if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
+	//{
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 		{
 			if (!(*it)->isAlive())
 			{
-				(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50 }); //make random number
+				(*it)->Spawn({ (float)(rand() % 90) - 50 , /*(float)(rand() % 90) - 50*/0, (float)(rand() % 90) - 50 }); //make random number
 
 				boidsSpawned++;
 
-				//cout << "X: " << (*it)->GetPos().x << endl;
-				//cout << "Y: " << (*it)->GetPos().y << endl;
-				//cout << "Z: " << (*it)->GetPos().z << endl;
-				//cout << "spawned boid: " <<  boidsSpawned << endl << endl;
-				
-				(*it)->MovePos(GetVel());
-				
 				break;
 			}
-		}
-
-		
-	}
+		}		
+	//}
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
@@ -60,16 +51,21 @@ void BoidManager::Tick(GameData * _GD)
 		{
 			if (boidsSpawned > 1)
 			{	
-				Vector3 v1, v2, v3;
+				Vector3 v1, v2, v3 , v4;
 				v1 = Seperation(*it);
 				v2 = Cohesion(*it);
 				v3 = Alignment(*it);
+				v4 = BoundPosition(*it);
 
-				(*it)->SetVel(((*it)->GetVel() + v1 + v2 + v3) * _GD->m_dt);
+				
+
+				(*it)->SetVel(((*it)->GetVel() + v1 + v2 + v3));
+				LimitSpeed(*it);
 				(*it)->MovePos((*it)->GetVel());
 
-				//(*it)->MovePos((Seperation(*it) + Cohesion(*it) + Alignment(*it)) * _GD->m_dt);
 				
+
+				//(*it)->MovePos((Seperation(*it) + Cohesion(*it) + Alignment(*it)) * _GD->m_dt);				
 				
 				//(*it)->MovePos(Rules((*it)));
 			}
@@ -82,7 +78,7 @@ void BoidManager::Draw(DrawData * _DD)
 {
 	for (auto& boid : m_Boids)
 	{
-		if (boid->isAlive())
+		if (boid->isAlive()) 
 		{
 			boid->Draw(_DD);
 		}
@@ -91,23 +87,24 @@ void BoidManager::Draw(DrawData * _DD)
 
 Vector3 BoidManager::Cohesion(Boid* _boid)
 {
+	Vector3 CofM = Vector3::Zero;
+	Vector3 cohesion_rule = Vector3::Zero;
+
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
-		//cout << Vector3::Distance((*it)->GetPos(), _boid->GetPos()) << endl;
-
-		//cout << Vector3::Distance((*it)->GetPos(), _boid->GetPos()) << endl;
-		if (Vector3::Distance((*it)->GetPos(), _boid->GetPos()) < 20.0f)
+		if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 10.0f)
 		{
 			if ((*it) != _boid)
 			{
-				_boid->CofM += (*it)->GetPos();
-
-			}			
+				CofM += (*it)->GetPos();
+			}
 		}
-	}				
-	_boid->CofM = _boid->CofM / (boidsSpawned - 1);
-				_boid->cohesion_rule = (_boid->CofM - _boid->GetPos());
-	return _boid->cohesion_rule / 5;
+	}	
+
+	CofM = CofM / (boidsSpawned - 1);
+	cohesion_rule = (CofM - GetPos());	
+
+	return cohesion_rule;
 }
 
 Vector3 BoidManager::Seperation(Boid * _boid)
@@ -118,16 +115,10 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 	{
 		if ((*it) != _boid)
 		{
-			if (Vector3::Distance((*it)->GetPos(), _boid->GetPos()) < 8.0f )
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 8.0f )
 			{
-				//cout << Vector3::Distance((*it)->GetPos(), _boid->GetPos()) << endl;
-
 				seperation_rule -= (((*it)->GetPos() - _boid->GetPos()) );
 			}
-			//else if (Vector3::Distance((*it)->GetPos(), _boid->GetPos()) > 15.0f)
-			//{
-			//	seperation_rule = Vector3::Zero;
-			//}
 		}
 	}
 
@@ -147,7 +138,54 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	}
 	alignment_rule = (alignment_rule / (boidsSpawned - 1));
 
-
 	return ((alignment_rule - _boid->GetVel()));
+}
+
+void BoidManager::LimitSpeed(Boid * _boid)
+{
+	float vLimit = 0.4;
+	float bvelocity = fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z);
+
+	if ((fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z) > vLimit ))
+	{
+		_boid->SetVel(_boid->GetVel() / bvelocity * vLimit);
+	}
+}
+
+Vector3 BoidManager::BoundPosition(Boid * _boid)
+{
+
+	int Xmin = -150, Xmax = 150, Ymin = -150, Ymax = 150, Zmin= -150, Zmax = 150;
+	int i = 20;
+	Vector3 bound_rule;
+
+	if (_boid->GetPos().x < Xmin)
+	{
+		bound_rule.x = i;
+	}
+	else if (_boid->GetPos().x > Xmax)
+	{
+		bound_rule.x = -i;
+	}
+
+	if (_boid->GetPos().y < Ymin)
+	{
+		bound_rule.y = i;
+	}
+	else if (_boid->GetPos().y > Ymax)
+	{
+		bound_rule.y = -i;
+	}
+
+	if (_boid->GetPos().z < Zmin)
+	{
+		bound_rule.z = i;
+	}
+	else if (_boid->GetPos().z > Zmax)
+	{
+		bound_rule.z = -i;
+	}
+
+	return bound_rule;
 }
 

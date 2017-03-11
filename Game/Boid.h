@@ -16,8 +16,7 @@ public:
 
 	bool isAlive() { return m_alive; }
 
-	Vector3 CofM = Vector3::Zero;
-	Vector3 cohesion_rule = Vector3::Zero;
+	
 
 protected:
 
