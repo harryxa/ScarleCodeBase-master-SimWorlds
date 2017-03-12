@@ -61,7 +61,7 @@ void BoidManager::Tick(GameData * _GD)
 				// * _GD->m_dt);	for use later
 
 				//sets boid a velocity
-				(*it)->SetVel((*it)->GetVel() + v1 + v2 +v3 + v4);
+				(*it)->SetVel((*it)->GetVel() +v1 + v2 + v3 + v4);
 
 				//limits the speed of the boids
 				LimitSpeed(*it);
@@ -90,24 +90,24 @@ void BoidManager::Draw(DrawData * _DD)
 
 Vector3 BoidManager::Cohesion(Boid* _boid)
 {
-	Vector3 CofM = Vector3::Zero;
-	Vector3 cohesion_rule = Vector3::Zero;
+		Vector3 CofM = Vector3::Zero;
+		Vector3 cohesion_rule = Vector3::Zero;
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
-		if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 10.0f)
-		{
+	//	if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 10.0f)
+		//{
 			if ((*it) != _boid)
 			{
 				CofM += (*it)->GetPos();
 			}
-		}
+		//}
 	}	
 
 	CofM = CofM / (boidsSpawned - 1);
-	cohesion_rule = (CofM - GetPos());	
+	cohesion_rule = (CofM - _boid->GetPos());	
 
-	return cohesion_rule;
+	return cohesion_rule/3000;
 }
 
 Vector3 BoidManager::Seperation(Boid * _boid)
@@ -118,13 +118,12 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 	{
 		if ((*it) != _boid)
 		{
-			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 8.0f )
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= 8.0f )
 			{
-				seperation_rule -= (((*it)->GetPos() - _boid->GetPos()) );
-			}
+				seperation_rule -= (*it)->GetPos() - _boid->GetPos();
+			}		
 		}
 	}
-
 	return seperation_rule;
 }
 
@@ -135,13 +134,16 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it) != _boid)
-		{
-			alignment_rule += (*it)->GetVel();
+		{ 
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= 20.0f)
+			{
+				alignment_rule += (*it)->GetVel();
+			}
 		}
 	}
 	alignment_rule = (alignment_rule / (boidsSpawned - 1));
 
-	return (alignment_rule - _boid->GetVel());
+	return (alignment_rule - _boid->GetVel())/50;
 }
 
 //limits the velocity of the boids
@@ -161,7 +163,7 @@ Vector3 BoidManager::BoundPosition(Boid * _boid)
 {
 
 	int Xmin = -150, Xmax = 150, Ymin = -150, Ymax = 150, Zmin= -150, Zmax = 150;
-	int i = 100;
+	int i = 20;
 	Vector3 bound_rule;
 
 	if (_boid->GetPos().x < Xmin)
