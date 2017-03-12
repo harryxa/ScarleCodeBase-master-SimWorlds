@@ -30,7 +30,7 @@ void BoidManager::Tick(GameData * _GD)
 	float randY = rand() % 80 - 40;
 
 
-	//if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
+	///if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
 	//{
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 		{
@@ -95,7 +95,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
-	//	if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 10.0f)
+		//if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 15.0f)
 		//{
 			if ((*it) != _boid)
 			{
@@ -107,7 +107,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	CofM = CofM / (boidsSpawned - 1);
 	cohesion_rule = (CofM - _boid->GetPos());	
 
-	return cohesion_rule/3000;
+	return cohesion_rule / 1000;
 }
 
 Vector3 BoidManager::Seperation(Boid * _boid)
@@ -124,7 +124,7 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 			}		
 		}
 	}
-	return seperation_rule;
+	return seperation_rule / 10;
 }
 
 Vector3 BoidManager::Alignment(Boid * _boid)
@@ -143,13 +143,13 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	}
 	alignment_rule = (alignment_rule / (boidsSpawned - 1));
 
-	return (alignment_rule - _boid->GetVel())/50;
+	return (alignment_rule - _boid->GetVel())/20;
 }
 
 //limits the velocity of the boids
 void BoidManager::LimitSpeed(Boid * _boid)
 {
-	float vLimit = 0.4;
+	float vLimit = 4;
 	float bvelocity = fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z);
 
 	if ((fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z) > vLimit ))
