@@ -91,6 +91,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	Vector3 CofM = Vector3::Zero;
 	Vector3 cohesion_rule = Vector3::Zero;
 	int close = 0;
+	
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it) != _boid && _boid->isAlive())
@@ -112,7 +113,8 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	}
 	if (close < 1)
 	{
-		cohesion_rule = (CofM - _boid->GetPos())/ 10;
+		//cohesion_rule = (CofM - _boid->GetPos())/ 10;
+		cohesion_rule = Vector3((float)(rand() % 90) - 50, 0, (float)(rand() % 90) - 50);
 	}
 
 	return cohesion_rule /1000;
@@ -169,9 +171,9 @@ void BoidManager::LimitSpeed(Boid * _boid)
 //sets the limits to which boids can move
 Vector3 BoidManager::BoundPosition(Boid * _boid)
 {
-
-	int Xmin = -60, Xmax = 60, Ymin = -60, Ymax = 60, Zmin= -60, Zmax = 60;
 	int i = 60;
+	int j = 60; // for if i want bounding box to be changable, 1. continuous flow, 2. bounce of walls
+	int Xmin = -j, Xmax = j, Ymin = -j, Ymax = j, Zmin = -j, Zmax = j;
 	Vector3 bound_rule;
 
 	if (_boid->GetPos().x < Xmin)
