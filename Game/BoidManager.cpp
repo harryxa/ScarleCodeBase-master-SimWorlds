@@ -53,6 +53,7 @@ void BoidManager::Tick(GameData * _GD)
 			if (boidsSpawned > 1)
 			{
 				Vector3 v1, v2, v3, v4;
+
 				v1 = Seperation(*it);
 				v2 = Cohesion(*it);
 				v3 = Alignment(*it);
@@ -94,11 +95,15 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	{
 		if ((*it) != _boid && _boid->isAlive())
 		{
-			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 20.0f)
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 15.0f)
 			{				
 				CofM += (*it)->GetPos();
 				close++;
 			}
+			//if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) > 20.0f)
+			//{
+			//	CofM = Vector3::Zero;
+			//}
 		}		
 	}	
 	if (close > 0)
@@ -119,7 +124,7 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 	{
 		if ((*it) != _boid)
 		{
-			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= 8.0f )
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= 4.0f )
 			{
 				seperation_rule -= (*it)->GetPos() - _boid->GetPos();
 			}		
@@ -163,8 +168,8 @@ void BoidManager::LimitSpeed(Boid * _boid)
 Vector3 BoidManager::BoundPosition(Boid * _boid)
 {
 
-	int Xmin = -150, Xmax = 150, Ymin = -150, Ymax = 150, Zmin= -150, Zmax = 150;
-	int i = 20;
+	int Xmin = -60, Xmax = 60, Ymin = -60, Ymax = 60, Zmin= -60, Zmax = 60;
+	int i = 1;
 	Vector3 bound_rule;
 
 	if (_boid->GetPos().x < Xmin)
