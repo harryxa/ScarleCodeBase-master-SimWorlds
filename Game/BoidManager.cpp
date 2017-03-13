@@ -89,22 +89,26 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 {
 	Vector3 CofM = Vector3::Zero;
 	Vector3 cohesion_rule = Vector3::Zero;
-
+	int close = 0;
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
-		if ((*it) != _boid)
+		if ((*it) != _boid && _boid->isAlive())
 		{
-			//if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 10.0f)
-			//{				
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 20.0f)
+			{				
 				CofM += (*it)->GetPos();
-			//}
-		}
+				close++;
+			}
+		}		
 	}	
+	if (close > 0)
+	{
+		CofM = CofM / (close); //need to check how many boids are within appropriate distance and divide by that
 
-	CofM = CofM / (boidsSpawned - 1); //need to check how many boids are within appropriate distance and divide by that
-	cohesion_rule = (CofM - _boid->GetPos());	
+		cohesion_rule = (CofM - _boid->GetPos());
+	}
 
-	return cohesion_rule /7000;
+	return cohesion_rule /1000;
 }
 
 Vector3 BoidManager::Seperation(Boid * _boid)
@@ -121,7 +125,7 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 			}		
 		}
 	}
-	return seperation_rule/20;
+	return seperation_rule/50;
 }
 
 Vector3 BoidManager::Alignment(Boid * _boid)
@@ -140,7 +144,7 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	}
 	alignment_rule = (alignment_rule / (boidsSpawned - 1));
 
-	return (alignment_rule - _boid->GetVel())/20;
+	return (alignment_rule - _boid->GetVel())/50;
 }
 
 //limits the velocity of the boids
