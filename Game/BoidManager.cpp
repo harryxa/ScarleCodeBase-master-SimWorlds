@@ -188,7 +188,7 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 //limits the velocity of the boids
 void BoidManager::LimitSpeed(Boid * _boid)
 {
-	float vLimit = 4;
+	float vLimit = 5;
 	float bvelocity = fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z);
 
 	if ((fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z) > vLimit ))
