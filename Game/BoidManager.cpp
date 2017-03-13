@@ -95,22 +95,24 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	{
 		if ((*it) != _boid && _boid->isAlive())
 		{
+		
 			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 15.0f)
 			{				
 				CofM += (*it)->GetPos();
-				close++;
+				close++;				
 			}
-			//if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) > 20.0f)
-			//{
-			//	CofM = Vector3::Zero;
-			//}
 		}		
 	}	
+
 	if (close > 0)
 	{
 		CofM = CofM / (close); //need to check how many boids are within appropriate distance and divide by that
 
 		cohesion_rule = (CofM - _boid->GetPos());
+	}
+	if (close < 1)
+	{
+		cohesion_rule = (CofM - _boid->GetPos())/ 10;
 	}
 
 	return cohesion_rule /1000;
@@ -169,34 +171,40 @@ Vector3 BoidManager::BoundPosition(Boid * _boid)
 {
 
 	int Xmin = -60, Xmax = 60, Ymin = -60, Ymax = 60, Zmin= -60, Zmax = 60;
-	int i = 1;
+	int i = 60;
 	Vector3 bound_rule;
 
 	if (_boid->GetPos().x < Xmin)
 	{
-		bound_rule.x = i;
+		_boid->SetPos(Vector3(i, _boid->GetPos().y, _boid->GetPos().z));
+		//bound_rule.x = i;
 	}
 	else if (_boid->GetPos().x > Xmax)
 	{
-		bound_rule.x = -i;
+		_boid->SetPos(Vector3(-i, _boid->GetPos().y, _boid->GetPos().z));
+		//bound_rule.x = -i;
 	}
 
 	if (_boid->GetPos().y < Ymin)
 	{
-		bound_rule.y = i;
+		_boid->SetPos(Vector3(_boid->GetPos().x, i, _boid->GetPos().z));
+		//bound_rule.y = i;
 	}
 	else if (_boid->GetPos().y > Ymax)
 	{
-		bound_rule.y = -i;
+		_boid->SetPos(Vector3(_boid->GetPos().x, -i, _boid->GetPos().z));
+		//bound_rule.y = -i;
 	}
 
 	if (_boid->GetPos().z < Zmin)
 	{
-		bound_rule.z = i;
+		_boid->SetPos(Vector3(_boid->GetPos().x, _boid->GetPos().y, i));
+		//bound_rule.z = i;
 	}
 	else if (_boid->GetPos().z > Zmax)
 	{
-		bound_rule.z = -i;
+		_boid->SetPos(Vector3(_boid->GetPos().x, _boid->GetPos().y, -i));
+		//bound_rule.z = -i;
 	}
 
 	return bound_rule;
