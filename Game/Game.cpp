@@ -171,8 +171,8 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//text->SetPos(Vector2(100, 10));
 	//text->SetColour(Color((float*)&Colors::Yellow));
 	//m_GameObject2Ds.push_back(text);
-
-	BoidManager* pBoidManager = new BoidManager(40, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
+	
+	BoidManager* pBoidManager = new BoidManager(50, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
 	m_GameObjects.push_back(pBoidManager);
 
 };

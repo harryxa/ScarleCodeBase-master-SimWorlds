@@ -34,17 +34,32 @@ void BoidManager::Tick(GameData * _GD)
 	//{
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 		{
+			
 			if (!(*it)->isAlive())
 			{
 				(*it)->Spawn({ (float)(rand() % 90) - 50 , 0,  (float)(rand() % 90) - 50 }); //make random number
 
 				boidsSpawned++;
-
+				for (int tag = 0; tag < boidsSpawned; tag++)
+				{
+					(*it)->boid_tag = tag;
+				}
 				(*it)->SetVel(Vector3(0, 0, 0));
+				
+				if ((*it)->boid_tag == 10)
+				{
+					(*it)->enemy = true;
+				}
+
 				break;
 			}
 		}
 	//}
+
+	
+		
+
+
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
@@ -54,9 +69,9 @@ void BoidManager::Tick(GameData * _GD)
 			{
 				Vector3 v1, v2, v3, v4;
 
-				v1 = Seperation(*it);
-				v2 = Cohesion(*it);
-				v3 = Alignment(*it);
+				v1 = Seperation(*it)  * _GD->m_dt;
+				v2 = Cohesion(*it)  * _GD->m_dt;
+				v3 = Alignment(*it)  * _GD->m_dt;
 				v4 = BoundPosition(*it);
 
 				// * _GD->m_dt);	for use later
@@ -98,9 +113,23 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 		{
 		
 			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 15.0f)
-			{				
-				CofM += (*it)->GetPos();
-				close++;				
+			{		
+				//if (_boid->enemy == false)
+				//{
+				//	if ((*it)->enemy == false)
+				//	{
+						CofM += (*it)->GetPos();
+						close++;
+				/*	}
+					else if((*it)->enemy == false)
+					{
+						CofM -= (*it)->GetPos() * 20000000;
+					}
+				}
+				else if (_boid->enemy == true)
+				{
+					CofM += (*it)->GetPos() * 1000;
+				}*/
 			}
 		}		
 	}	
@@ -114,10 +143,10 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	if (close < 1)
 	{
 		//cohesion_rule = (CofM - _boid->GetPos())/ 10;
-		cohesion_rule = Vector3((float)(rand() % 90) - 50, 0, (float)(rand() % 90) - 50);
+		cohesion_rule = Vector3((float)(rand() % 90) - 50, 0, (float)(rand() % 90) - 50) / 2;
 	}
 
-	return cohesion_rule /1000;
+	return cohesion_rule / 20;
 }
 
 Vector3 BoidManager::Seperation(Boid * _boid)
@@ -134,7 +163,7 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 			}		
 		}
 	}
-	return seperation_rule/50;
+	return seperation_rule;
 }
 
 Vector3 BoidManager::Alignment(Boid * _boid)
@@ -153,7 +182,7 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	}
 	alignment_rule = (alignment_rule / (boidsSpawned - 1));
 
-	return (alignment_rule - _boid->GetVel())/50;
+	return (alignment_rule - _boid->GetVel());
 }
 
 //limits the velocity of the boids

@@ -16,7 +16,8 @@ public:
 
 	bool isAlive() { return m_alive; }
 
-	int close_boids;
+	bool enemy = false;
+	int boid_tag;
 
 protected:
 
