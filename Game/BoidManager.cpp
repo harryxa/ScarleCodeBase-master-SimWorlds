@@ -26,15 +26,14 @@ void BoidManager::Tick(GameData * _GD)
 {
 	Vector3 forwardMove = Vector3::Forward;
 
-	float randX = rand() % 80 - 40;
-	float randY = rand() % 80 - 40;
+
 
 
 	//if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
 	//{
+	
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
-		{
-			
+		{			
 			if (!(*it)->isAlive())
 			{
 				(*it)->Spawn({ (float)(rand() % 90) - 50 , 0,  (float)(rand() % 90) - 50 }); //make random number
@@ -57,11 +56,6 @@ void BoidManager::Tick(GameData * _GD)
 		}
 	//}
 
-	
-		
-
-
-
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it)->isAlive())
@@ -70,9 +64,9 @@ void BoidManager::Tick(GameData * _GD)
 			{
 				Vector3 v1, v2, v3, v4;
 
-				v1 = Seperation(*it)  * _GD->m_dt;
-				v2 = Cohesion(*it)  * _GD->m_dt / 20;
-				v3 = Alignment(*it)  * _GD->m_dt;
+				v1 = Seperation(*it)  * _GD->m_dt / seperation_modifier;
+				v2 = Cohesion(*it)  * _GD->m_dt / cohesion_modifier;
+				v3 = Alignment(*it)  * _GD->m_dt / alignment_modifier;
 				v4 = BoundPosition(*it);
 
 				// * _GD->m_dt);	for use later
@@ -132,6 +126,10 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 					CofM += (*it)->GetPos() * 1000;
 				}*/
 			}
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 15.0f && close == 0)
+			{
+				CofM += (*it)->GetPos();
+			}
 		}		
 	}	
 
@@ -141,10 +139,11 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 
 		cohesion_rule = (CofM - _boid->GetPos());
 	}
-	if (close < 1)
+	if (close < 1 )
 	{
+		cohesion_rule = (CofM - _boid->GetPos()) / 10;
 		//cohesion_rule = (CofM - _boid->GetPos())/ 10;
-		cohesion_rule = Vector3((float)(rand() % 90) - 50, 0, (float)(rand() % 90) - 50) / 2;
+		//cohesion_rule = Vector3((float)(rand() % 90) - 50, 0, (float)(rand() % 90) - 50) / 2;
 	}
 
 	return cohesion_rule;
@@ -189,7 +188,7 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 //limits the velocity of the boids
 void BoidManager::LimitSpeed(Boid * _boid)
 {
-	float vLimit = 5;
+	float vLimit = speed_limit;
 	float bvelocity = fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z);
 
 	if ((fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z) > vLimit ))
@@ -241,4 +240,34 @@ Vector3 BoidManager::BoundPosition(Boid * _boid)
 
 	return bound_rule;
 }
+
+float * BoidManager::get_coh_mod()
+{
+	return &cohesion_modifier;
+}
+
+float * BoidManager::get_sep_mod()
+{
+	return &seperation_modifier;
+}
+
+float * BoidManager::get_ali_mod()
+{
+	return &alignment_modifier;
+}
+
+float * BoidManager::get_speed_limit()
+{
+	return &speed_limit;
+}
+
+int * BoidManager::get_boids_spawned()
+{
+	return &boidsSpawned;
+}
+
+//float * BoidManager::get_boids_to_spawn()
+//{
+//	return &boids_to_spawn;
+//}
 

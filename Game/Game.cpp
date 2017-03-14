@@ -174,14 +174,19 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//text->SetColour(Color((float*)&Colors::Yellow));
 	//m_GameObject2Ds.push_back(text);
 	
-	BoidManager* pBoidManager = new BoidManager(50, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
+	BoidManager* pBoidManager = new BoidManager(60, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
 	m_GameObjects.push_back(pBoidManager);
 
 	TwInit(TW_DIRECT3D11, _pd3dDevice);
 	TwWindowSize(1000, 1000);
 	TwBar *myBar;
 	myBar = TwNewBar("Boids Tweak Bar");
-	
+	TwAddVarRO(myBar, "Boids Spawned", TW_TYPE_INT8, pBoidManager->get_boids_spawned(), "label = 'Boids Spawned' ");
+	//TwAddVarRW(myBar, "BoidsVariable", TW_TYPE_FLOAT, pBoidManager->get_boids_to_spawn(), "min=0 max=50 step=1 group=Boids label='Number of Boids'");
+	TwAddVarRW(myBar, "CohesionVariable", TW_TYPE_FLOAT, pBoidManager->get_coh_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Cohesion  Modifier'");
+	TwAddVarRW(myBar, "SeperationVariable", TW_TYPE_FLOAT, pBoidManager->get_sep_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Seperation Modifier'");
+	TwAddVarRW(myBar, "AlignmentVariable", TW_TYPE_FLOAT, pBoidManager->get_ali_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Alignment  Modifier'");
+	TwAddVarRW(myBar, "SpeedVariable", TW_TYPE_FLOAT, pBoidManager->get_speed_limit(), "min=0 max=20 step=0.1 group=Steering label='Speed  Modifier'");
 
 };
 

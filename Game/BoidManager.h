@@ -25,6 +25,13 @@ public:
 	void LimitSpeed(Boid* _boid);
 	Vector3 BoundPosition(Boid* _boid);
 
+	float* get_coh_mod();
+	float* get_sep_mod();
+	float* get_ali_mod();
+	float* get_speed_limit();
+	int* get_boids_spawned();
+	//float* get_boids_to_spawn();
+
 
 
 	vector<Boid*> GetBoids() { return m_Boids; }
@@ -38,6 +45,13 @@ protected:
 
 private:
 	vector<Boid*> m_Boids;
+
+	float cohesion_modifier = 20;
+	float seperation_modifier = 1;
+	float alignment_modifier = 1;
+	float speed_limit = 5;
+	//float boids_to_spawn = 25;
+
 	int boidsSpawned = 0;
 };
 
