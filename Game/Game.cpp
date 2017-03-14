@@ -187,6 +187,9 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwAddVarRW(myBar, "SeperationVariable", TW_TYPE_FLOAT, pBoidManager->get_sep_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Seperation Modifier'");
 	TwAddVarRW(myBar, "AlignmentVariable", TW_TYPE_FLOAT, pBoidManager->get_ali_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Alignment  Modifier'");
 	TwAddVarRW(myBar, "SpeedVariable", TW_TYPE_FLOAT, pBoidManager->get_speed_limit(), "min=0 max=20 step=0.1 group=Steering label='Speed  Modifier'");
+	TwAddVarRW(myBar, "CohesionAwarenessVariable", TW_TYPE_FLOAT, pBoidManager->get_cohesion_awareness(), "min=0 max= 100 step=1 group=Awareness label='Cohesion Awareness'");
+	TwAddVarRW(myBar, "SeperationAwarenessVariable", TW_TYPE_FLOAT, pBoidManager->get_seperation_awareness(), "min=0 max= 100 step=1 group=Awareness label='Seperation Awareness'");
+	
 
 };
 

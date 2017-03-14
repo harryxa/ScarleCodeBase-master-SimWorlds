@@ -30,6 +30,8 @@ public:
 	float* get_ali_mod();
 	float* get_speed_limit();
 	int* get_boids_spawned();
+	float* get_cohesion_awareness();
+	float* get_seperation_awareness();
 	//float* get_boids_to_spawn();
 
 
@@ -50,6 +52,8 @@ private:
 	float seperation_modifier = 1;
 	float alignment_modifier = 1;
 	float speed_limit = 5;
+	float cohesion_awareness = 15;
+	float seperation_awareness = 4;
 	//float boids_to_spawn = 25;
 
 	int boidsSpawned = 0;

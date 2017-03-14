@@ -26,9 +26,6 @@ void BoidManager::Tick(GameData * _GD)
 {
 	Vector3 forwardMove = Vector3::Forward;
 
-
-
-
 	//if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
 	//{
 	
@@ -36,7 +33,7 @@ void BoidManager::Tick(GameData * _GD)
 		{			
 			if (!(*it)->isAlive())
 			{
-				(*it)->Spawn({ (float)(rand() % 90) - 50 , 0,  (float)(rand() % 90) - 50 }); //make random number
+				(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50,  (float)(rand() % 90) - 50 }); //make random number
 
 				boidsSpawned++;
 
@@ -68,8 +65,6 @@ void BoidManager::Tick(GameData * _GD)
 				v2 = Cohesion(*it)  * _GD->m_dt / cohesion_modifier;
 				v3 = Alignment(*it)  * _GD->m_dt / alignment_modifier;
 				v4 = BoundPosition(*it);
-
-				// * _GD->m_dt);	for use later
 
 				//sets boid a velocity
 				(*it)->SetVel((*it)->GetVel() + v1 + v2 + v3 + v4);
@@ -104,31 +99,17 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
-		if ((*it) != _boid && _boid->isAlive())
+		if ((*it) != _boid && (*it)->isAlive())
 		{
-		
-			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 15.0f)
+			//if boids are within 15.0f calculate CofM
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < cohesion_awareness)
 			{		
-				//if (_boid->enemy == false)
-				//{
-				//	if ((*it)->enemy == false)
-				//	{
+				//if local boids are not tagged as enemy they will move together
+				//if ((*it)->enemy == false)
+			//	{
 						CofM += (*it)->GetPos();
 						close++;
-				/*	}
-					else if((*it)->enemy == false)
-					{
-						CofM -= (*it)->GetPos() * 20000000;
-					}
-				}
-				else if (_boid->enemy == true)
-				{
-					CofM += (*it)->GetPos() * 1000;
-				}*/
-			}
-			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < 15.0f && close == 0)
-			{
-				CofM += (*it)->GetPos();
+				//}					
 			}
 		}		
 	}	
@@ -136,14 +117,11 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	if (close > 0)
 	{
 		CofM = CofM / (close); //need to check how many boids are within appropriate distance and divide by that
-
 		cohesion_rule = (CofM - _boid->GetPos());
 	}
 	if (close < 1 )
-	{
+	{		
 		cohesion_rule = (CofM - _boid->GetPos()) / 10;
-		//cohesion_rule = (CofM - _boid->GetPos())/ 10;
-		//cohesion_rule = Vector3((float)(rand() % 90) - 50, 0, (float)(rand() % 90) - 50) / 2;
 	}
 
 	return cohesion_rule;
@@ -156,14 +134,27 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it) != _boid)
-		{
-			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= 4.0f )
+		{		
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= seperation_awareness)
 			{
 				seperation_rule -= (*it)->GetPos() - _boid->GetPos();
-			}		
+			}
 		}
 	}
+
+	/*for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
+	{
+		if ((*it)->enemy == true)
+		{
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= 25.0f)
+			{
+				return seperation_rule * 10;
+			}
+		}
+	}*/
+		
 	return seperation_rule;
+	
 }
 
 Vector3 BoidManager::Alignment(Boid * _boid)
@@ -264,6 +255,16 @@ float * BoidManager::get_speed_limit()
 int * BoidManager::get_boids_spawned()
 {
 	return &boidsSpawned;
+}
+
+float * BoidManager::get_cohesion_awareness()
+{
+	return& cohesion_awareness;
+}
+
+float * BoidManager::get_seperation_awareness()
+{
+	return& seperation_awareness;
 }
 
 //float * BoidManager::get_boids_to_spawn()
