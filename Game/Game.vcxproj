@@ -72,6 +72,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\Bin\Desktop_2015\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>..\Bin\Desktop_2015\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)AntTweakBar\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)AntTweakBar\lib;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SolutionDir)AntTweakBar\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\Bin\Desktop_2015\$(Platform)\$(Configuration)\</OutDir>
@@ -82,7 +85,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Inc;$(SolutionDir)AntTweakBar\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_DEBUG;DEBUG</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>

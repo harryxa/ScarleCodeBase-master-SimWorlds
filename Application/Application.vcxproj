@@ -95,8 +95,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\Game</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir);..\Lib\um\x86;..\Bin\Desktop_2015\$(Platform)\$(Configuration)\</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\Game;$(SolutionDir)AntTweakBar\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir);..\Lib\um\x86;..\Bin\Desktop_2015\$(Platform)\$(Configuration)\;$(SolutionDir)AntTweakBar\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <LinkIncremental>true</LinkIncremental>
@@ -136,11 +136,11 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <AdditionalIncludeDirectories>..\Game;..\Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Game;..\Inc;$(SolutionDir)AntTweakBar\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalOptions> %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies);game.lib;DirectXTK.lib;DirectXTKAudioWin8.lib</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies);game.lib;DirectXTK.lib;DirectXTKAudioWin8.lib;AntTweakBar.lib;AntTweakBar64.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <LargeAddressAware>true</LargeAddressAware>

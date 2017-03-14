@@ -40,6 +40,7 @@ void BoidManager::Tick(GameData * _GD)
 				(*it)->Spawn({ (float)(rand() % 90) - 50 , 0,  (float)(rand() % 90) - 50 }); //make random number
 
 				boidsSpawned++;
+
 				for (int tag = 0; tag < boidsSpawned; tag++)
 				{
 					(*it)->boid_tag = tag;
@@ -70,7 +71,7 @@ void BoidManager::Tick(GameData * _GD)
 				Vector3 v1, v2, v3, v4;
 
 				v1 = Seperation(*it)  * _GD->m_dt;
-				v2 = Cohesion(*it)  * _GD->m_dt;
+				v2 = Cohesion(*it)  * _GD->m_dt / 20;
 				v3 = Alignment(*it)  * _GD->m_dt;
 				v4 = BoundPosition(*it);
 
@@ -146,7 +147,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 		cohesion_rule = Vector3((float)(rand() % 90) - 50, 0, (float)(rand() % 90) - 50) / 2;
 	}
 
-	return cohesion_rule / 20;
+	return cohesion_rule;
 }
 
 Vector3 BoidManager::Seperation(Boid * _boid)

@@ -15,6 +15,8 @@
 #include "Boid.h"
 #include "BoidManager.h"
 
+#include <AntTweakBar.h>
+
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
@@ -175,6 +177,12 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	BoidManager* pBoidManager = new BoidManager(50, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
 	m_GameObjects.push_back(pBoidManager);
 
+	TwInit(TW_DIRECT3D11, _pd3dDevice);
+	TwWindowSize(1000, 1000);
+	TwBar *myBar;
+	myBar = TwNewBar("Boids Tweak Bar");
+	
+
 };
 
 
@@ -251,7 +259,7 @@ bool Game::Tick()
 	//lock the cursor to the centre of the window
 	RECT window;
 	GetWindowRect(m_hWnd, &window);
-	SetCursorPos((window.left + window.right) >> 1, (window.bottom + window.top) >> 1);
+	//SetCursorPos((window.left + window.right) >> 1, (window.bottom + window.top) >> 1);
 
 	//calculate frame time-step dt for passing down to game objects
 	DWORD currentTime = GetTickCount();
@@ -333,6 +341,8 @@ void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext)
 
 	//drawing text screws up the Depth Stencil State, this puts it back again!
 	_pd3dImmediateContext->OMSetDepthStencilState(m_states->DepthDefault(), 0);
+
+	TwDraw();
 };
 
 

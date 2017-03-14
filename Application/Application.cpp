@@ -18,6 +18,7 @@
 #include "Application.h"
 #include "../Game/Game.h"
 
+
 #define DESTROY( x ) if( x ){ x->Release(); x = nullptr;}
 
 //--------------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ HRESULT Application::InitWindow( HINSTANCE _hInstance, int _nCmdShow )
     // Create window
     m_hInst = _hInstance;
 #ifdef DEBUG
-	RECT rc = { 0, 0, 800, 600 };
+	RECT rc = { 0, 0, 1200, 900 };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 	m_hWnd = CreateWindow(L"GEAWindowClass", L"GEA GROUP PROJECT", WS_OVERLAPPEDWINDOW,
 		600, 100, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, _hInstance,
@@ -80,7 +81,7 @@ HRESULT Application::InitWindow( HINSTANCE _hInstance, int _nCmdShow )
     ShowWindow( m_hWnd, _nCmdShow );
 
 	//Hide the mouse pointer
-	ShowCursor(false);
+	ShowCursor(true);
 	
     return S_OK;
 }
