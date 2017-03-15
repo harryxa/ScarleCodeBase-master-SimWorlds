@@ -26,10 +26,12 @@ void BoidManager::Tick(GameData * _GD)
 {
 	Vector3 forwardMove = Vector3::Forward;
 
-	//if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
+	//if (_GD->m_dt * 5 > ((float)rand() / (float)RAND_MAX))
 	//{	
+	for (int i = 0; i < number_of_boids; i++)
+	{
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
-		{			
+		{
 			if (!(*it)->isAlive())
 			{
 				(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50,  (float)(rand() % 90) - 50 }); //make random number
@@ -41,14 +43,16 @@ void BoidManager::Tick(GameData * _GD)
 					(*it)->boid_tag = tag;
 				}
 				(*it)->SetVel(Vector3(0, 0, 0));
-				
+
 				if ((*it)->boid_tag == 10)
 				{
 					(*it)->enemy = true;
+					(*it)->SetScale(5);
 				}
 				break;
 			}
-		}
+		}		
+	}
 	//}
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
@@ -57,16 +61,29 @@ void BoidManager::Tick(GameData * _GD)
 		{
 			if (boidsSpawned > 1)
 			{
-				Vector3 v1, v2, v3, v4;
+				Vector3 v1_prey, v1_predator, v2_prey, v2_predator,  v3_prey,  v3_predator, v4, v5_prey;
 
-				v1 = Seperation(*it)  * _GD->m_dt / seperation_modifier;
-				v2 = Cohesion(*it)  * _GD->m_dt / cohesion_modifier;
-				v3 = Alignment(*it)  * _GD->m_dt / alignment_modifier;
+				v1_prey = Seperation(*it)  * _GD->m_dt / seperation_modifier;
+				v1_predator = Seperation(*it)  * _GD->m_dt / seperation_modifier_pred;
+
+				v2_prey = Cohesion(*it)  * _GD->m_dt / cohesion_modifier;
+				v2_predator = Cohesion(*it)  * _GD->m_dt / cohesion_modifier_pred;
+
+				v3_prey = Alignment(*it)  * _GD->m_dt / alignment_modifier;
+				v3_predator = Alignment(*it)  * _GD->m_dt / alignment_modifier_pred;
+
 				v4 = BoundPosition(*it);
+				v5_prey = PreyScatter(*it);
 
-				//sets boid a velocity
-				(*it)->SetVel((*it)->GetVel() + v1 + v2 + v3 + v4);
-
+				if ((*it)->enemy == false)
+				{
+					//sets boid a velocity
+					(*it)->SetVel((*it)->GetVel() + v1_prey + v2_prey + v3_prey + v4 + v5_prey);
+				} 
+				if ((*it)->enemy == true)
+				{
+					(*it)->SetVel((*it)->GetVel() + v1_predator + v2_predator + v3_predator + v4);
+				}
 				//limits the speed of the boids
 				LimitSpeed(*it);
 
@@ -99,17 +116,13 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
-		if ((*it) != _boid && (*it)->isAlive())
+		if ((*it) != _boid && (*it)->isAlive() && (*it)->enemy == false)
 		{
 			//if boids are within 15.0f calculate CofM
 			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < cohesion_awareness)
 			{		
-				//if local boids are not tagged as enemy they will move together
-				//if ((*it)->enemy == false)
-			//	{
-						CofM += (*it)->GetPos();
-						close++;
-				//}					
+				CofM += (*it)->GetPos();
+				close++;
 			}
 		}		
 	}	
@@ -140,21 +153,27 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 				seperation_rule -= (*it)->GetPos() - _boid->GetPos();
 			}
 		}
-	}
+	}	
+		
+	return seperation_rule;	
+}
 
-	/*for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
+Vector3 BoidManager::PreyScatter(Boid * _boid)
+{
+	Vector3 prey_rule;
+
+	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it)->enemy == true)
 		{
-			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= 25.0f)
+			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= prey_scatter_awareness)
 			{
-				return seperation_rule * 10;
+				prey_rule -= (*it)->GetPos() - _boid->GetPos();
 			}
 		}
-	}*/
-		
-	return seperation_rule;
-	
+	}
+
+	return prey_rule/20;
 }
 
 Vector3 BoidManager::Alignment(Boid * _boid)
@@ -247,6 +266,21 @@ float * BoidManager::get_ali_mod()
 	return &alignment_modifier;
 }
 
+float * BoidManager::get_coh_mod_pred()
+{
+	return &cohesion_modifier_pred;
+}
+
+float * BoidManager::get_sep_mod_pred()
+{
+	return &seperation_modifier_pred;
+}
+
+float * BoidManager::get_ali_mod_pred()
+{
+	return &alignment_modifier_pred;
+}
+
 float * BoidManager::get_speed_limit()
 {
 	return &speed_limit;
@@ -265,6 +299,11 @@ float * BoidManager::get_cohesion_awareness()
 float * BoidManager::get_seperation_awareness()
 {
 	return& seperation_awareness;
+}
+
+float * BoidManager::get_scatter()
+{
+	return& prey_scatter_awareness;
 }
 
 float * BoidManager::setDimension()

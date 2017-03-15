@@ -183,18 +183,27 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	myBar = TwNewBar("Boids Tweak Bar");
 	TwAddVarRO(myBar, "Boids Spawned", TW_TYPE_FLOAT, pBoidManager->get_boids_spawned(), "group=Boid Stats label = 'Boids Spawned' ");
 	//TwAddVarRW(myBar, "BoidsVariable", TW_TYPE_FLOAT, pBoidManager->get_boids_to_spawn(), "min=0 max=50 step=1 group=Boids label='Number of Boids'");
-	TwAddVarRW(myBar, "CohesionVariable", TW_TYPE_FLOAT, pBoidManager->get_coh_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Cohesion  Modifier'");
-	TwAddVarRW(myBar, "SeperationVariable", TW_TYPE_FLOAT, pBoidManager->get_sep_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Seperation Modifier'");
-	TwAddVarRW(myBar, "AlignmentVariable", TW_TYPE_FLOAT, pBoidManager->get_ali_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Alignment  Modifier'");
-	TwAddVarRW(myBar, "SpeedVariable", TW_TYPE_FLOAT, pBoidManager->get_speed_limit(), "min=0 max=20 step=0.1 group=Steering label='Speed  Modifier'");
-	TwAddVarRW(myBar, "CohesionAwarenessVariable", TW_TYPE_FLOAT, pBoidManager->get_cohesion_awareness(), "min=0 max= 100 step=1 group=Awareness label='Cohesion Awareness'");
-	TwAddVarRW(myBar, "SeperationAwarenessVariable", TW_TYPE_FLOAT, pBoidManager->get_seperation_awareness(), "min=0 max= 100 step=0.5 group=Awareness label='Seperation Awareness'");
 
+	//prey steering toolbar
+	TwAddVarRW(myBar, "CohesionVariable", TW_TYPE_FLOAT, pBoidManager->get_coh_mod(), "min=0.1 max=100 step=0.1 group='Prey Steering' label='Cohesion  Modifier'");
+	TwAddVarRW(myBar, "SeperationVariable", TW_TYPE_FLOAT, pBoidManager->get_sep_mod(), "min=0.1 max=100 step=0.1 group='Prey Steering' label='Seperation Modifier'");
+	TwAddVarRW(myBar, "AlignmentVariable", TW_TYPE_FLOAT, pBoidManager->get_ali_mod(), "min=0.1 max=100 step=0.1 group='Prey Steering' label='Alignment  Modifier'");
+	TwAddVarRW(myBar, "CohesionAwarenessVariable", TW_TYPE_FLOAT, pBoidManager->get_cohesion_awareness(), "min=0 max= 100 step=1 group='Prey Steering' label='Cohesion Awareness'");
+	TwAddVarRW(myBar, "SeperationAwarenessVariable", TW_TYPE_FLOAT, pBoidManager->get_seperation_awareness(), "min=0 max= 100 step=0.5 group='Prey Steering' label='Seperation Awareness'");
+	TwAddVarRW(myBar, "ScatterAwarenessVariable", TW_TYPE_FLOAT, pBoidManager->get_scatter(), "min=0 max= 100 step=0.5 group='Prey Steering' label='Scatter Awareness'");
+
+	//preditor steering toolbar
+	TwAddVarRW(myBar, "CohesionVariablePred", TW_TYPE_FLOAT, pBoidManager->get_coh_mod_pred(), "min=0.1 max=100 step=0.1 group='Pred Steering' label='Cohesion  Modifier Pred'");
+	TwAddVarRW(myBar, "SeperationVariablePred", TW_TYPE_FLOAT, pBoidManager->get_sep_mod_pred(), "min=0.1 max=100 step=0.1 group='Pred Steering' label='Seperation Modifier Pred'");
+	TwAddVarRW(myBar, "AlignmentVariablePred", TW_TYPE_FLOAT, pBoidManager->get_ali_mod_pred(), "min=0.1 max=100 step=0.1 group='Pred Steering' label='Alignment  Modifier Pred'");
+
+	//global steering toolbar
+	TwAddVarRW(myBar, "SpeedVariable", TW_TYPE_FLOAT, pBoidManager->get_speed_limit(), "min=0 max=20 step=0.1 group='speed limit' label='Speed  Modifier'");
+
+	//misc.
 	TwAddVarRW(myBar, "CameraYVariable", TW_TYPE_FLOAT, get_cam_y(), "min=50 max= 300 step=10 group=Camera label='Camera Angle'");
-	TwAddVarRW(myBar, "Dimension", TW_TYPE_FLOAT, pBoidManager->setDimension(), "min=1 max= 2 step=1 group=Dimension label='2D or 3D'");
+	TwAddVarRW(myBar, "3D/2D", TW_TYPE_FLOAT, pBoidManager->setDimension(), "min=0 max= 1 step=1 group=Dimension label=Dimension label='2D or 3D'");
 	
-	
-
 };
 
 
