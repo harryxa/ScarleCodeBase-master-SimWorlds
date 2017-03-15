@@ -19,8 +19,11 @@ public:
 	bool enemy = false;
 	int boid_tag;
 
+	
+
 protected:
 
 	bool m_alive;
+	Vector3 m_up;
 };
 

@@ -27,13 +27,12 @@ void BoidManager::Tick(GameData * _GD)
 	Vector3 forwardMove = Vector3::Forward;
 
 	//if (_GD->m_dt * 0.2 > ((float)rand() / (float)RAND_MAX))
-	//{
-	
+	//{	
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 		{			
 			if (!(*it)->isAlive())
 			{
-				(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50,  (float)(rand() % 90) - 50 }); //make random number
+				(*it)->Spawn({ (float)(rand() % 90) - 50 , 0,  (float)(rand() % 90) - 50 }); //make random number
 
 				boidsSpawned++;
 
@@ -47,7 +46,6 @@ void BoidManager::Tick(GameData * _GD)
 				{
 					(*it)->enemy = true;
 				}
-
 				break;
 			}
 		}

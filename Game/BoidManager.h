@@ -52,8 +52,8 @@ private:
 	float seperation_modifier = 1;
 	float alignment_modifier = 1;
 	float speed_limit = 5;
-	float cohesion_awareness = 15;
-	float seperation_awareness = 4;
+	float cohesion_awareness = 10;
+	float seperation_awareness = 1.5;
 	//float boids_to_spawn = 25;
 
 	int boidsSpawned = 0;
