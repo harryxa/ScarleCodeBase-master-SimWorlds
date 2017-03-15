@@ -15,6 +15,7 @@
 #include "Audio.h"
 
 
+
 using std::list;
 using std::unique_ptr;
 using namespace DirectX;
@@ -28,6 +29,7 @@ struct GameData;
 struct DrawData;
 struct DrawData2D;
 class Light;
+//class BoidManager;
 
 class Game
 {
@@ -56,6 +58,7 @@ protected:
 
 	//direct input stuff
 	bool ReadInput(); //Get current Mouse and Keyboard states
+	
 	IDirectInput8*			m_pDirectInput;
 	IDirectInputDevice8*	m_pKeyboard;
 	IDirectInputDevice8*	m_pMouse;
@@ -73,7 +76,16 @@ protected:
 
 	//Tick functions for each state
 	void PlayTick();
+	
+	
+	
+	float * get_cam_y();	
+	float getcamy() { return cam_y; }
+	void setcamy(float _camy) { cam_y = _camy; }
+
 private:
+	float cam_y = 250;
+
 	
 };
 

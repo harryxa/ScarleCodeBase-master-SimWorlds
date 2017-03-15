@@ -86,7 +86,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	//create a base camera
 	m_cam = new Camera(0.25f * XM_PI, AR, 1.0f, 10000.0f, Vector3::UnitY, Vector3::Zero);
-	m_cam->SetPos(Vector3(0.0f, 100.0f, 100.0f));
+	m_cam->SetPos(Vector3(0, getcamy(), 200));
 	m_GameObjects.push_back(m_cam);
 
 	//create a base light
@@ -144,11 +144,11 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//spiral->SetScale(4.0f);
 	//m_GameObjects.push_back(spiral);
 
-	//VBPillow* pillow = new VBPillow();
-	//pillow->init(11, _pd3dDevice);
-	//pillow->SetPos(Vector3(-100.0f, 0.0f, -100.0f));
-	//pillow->SetScale(4.0f);
-	//m_GameObjects.push_back(pillow);
+	/*VBPillow* pillow = new VBPillow();
+	pillow->init(11, _pd3dDevice);
+	pillow->SetPos(Vector3(-100.0f, 0.0f, -100.0f));
+	pillow->SetScale(4.0f);
+	m_GameObjects.push_back(pillow);*/
 
 	//VBSnail* snail = new VBSnail(_pd3dDevice, "../Assets/baseline.txt", 150, 0.98f, 0.09f * XM_PI, 0.4f, Color(1.0f, 0.0f, 0.0f, 1.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
 	//snail->SetPos(Vector3(-100.0f, 0.0f, 100.0f));
@@ -181,7 +181,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwWindowSize(1000, 1000);
 	TwBar *myBar;
 	myBar = TwNewBar("Boids Tweak Bar");
-	TwAddVarRO(myBar, "Boids Spawned", TW_TYPE_INT8, pBoidManager->get_boids_spawned(), "label = 'Boids Spawned' ");
+	TwAddVarRO(myBar, "Boids Spawned", TW_TYPE_FLOAT, pBoidManager->get_boids_spawned(), "group=Boid Stats label = 'Boids Spawned' ");
 	//TwAddVarRW(myBar, "BoidsVariable", TW_TYPE_FLOAT, pBoidManager->get_boids_to_spawn(), "min=0 max=50 step=1 group=Boids label='Number of Boids'");
 	TwAddVarRW(myBar, "CohesionVariable", TW_TYPE_FLOAT, pBoidManager->get_coh_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Cohesion  Modifier'");
 	TwAddVarRW(myBar, "SeperationVariable", TW_TYPE_FLOAT, pBoidManager->get_sep_mod(), "min=0.1 max=100 step=0.1 group=Steering label='Seperation Modifier'");
@@ -189,6 +189,10 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwAddVarRW(myBar, "SpeedVariable", TW_TYPE_FLOAT, pBoidManager->get_speed_limit(), "min=0 max=20 step=0.1 group=Steering label='Speed  Modifier'");
 	TwAddVarRW(myBar, "CohesionAwarenessVariable", TW_TYPE_FLOAT, pBoidManager->get_cohesion_awareness(), "min=0 max= 100 step=1 group=Awareness label='Cohesion Awareness'");
 	TwAddVarRW(myBar, "SeperationAwarenessVariable", TW_TYPE_FLOAT, pBoidManager->get_seperation_awareness(), "min=0 max= 100 step=0.5 group=Awareness label='Seperation Awareness'");
+
+	TwAddVarRW(myBar, "CameraYVariable", TW_TYPE_FLOAT, get_cam_y(), "min=50 max= 300 step=10 group=Camera label='Camera Angle'");
+	TwAddVarRW(myBar, "Dimension", TW_TYPE_FLOAT, pBoidManager->setDimension(), "min=1 max= 2 step=1 group=Dimension label='2D or 3D'");
+	
 	
 
 };
@@ -246,6 +250,7 @@ Game::~Game()
 
 bool Game::Tick() 
 {
+	float cam;
 	//tick audio engine
 	if (!m_audioEngine->Update())
 	{
@@ -291,6 +296,10 @@ bool Game::Tick()
 		break;
 	}
 	
+	
+	m_cam->SetPos(Vector3(0, getcamy(), 200));
+
+	
 	return true;
 };
 
@@ -319,6 +328,8 @@ void Game::PlayTick()
 		(*it)->Tick(m_GD);
 	}
 }
+
+
 
 void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext) 
 {
@@ -398,3 +409,9 @@ bool Game::ReadInput()
 
 	return true;
 }
+
+float * Game::get_cam_y()
+{
+	return& cam_y;
+}
+

@@ -32,7 +32,7 @@ void BoidManager::Tick(GameData * _GD)
 		{			
 			if (!(*it)->isAlive())
 			{
-				(*it)->Spawn({ (float)(rand() % 90) - 50 , 0,  (float)(rand() % 90) - 50 }); //make random number
+				(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50,  (float)(rand() % 90) - 50 }); //make random number
 
 				boidsSpawned++;
 
@@ -72,10 +72,12 @@ void BoidManager::Tick(GameData * _GD)
 
 				//moves the boids using velocity
 				(*it)->MovePos((*it)->GetVel());
+				setDimensionFunction((*it));
 			}
 			(*it)->Tick(_GD);
 		}
 	}
+	
 }
 
 void BoidManager::Draw(DrawData * _DD)
@@ -250,7 +252,7 @@ float * BoidManager::get_speed_limit()
 	return &speed_limit;
 }
 
-int * BoidManager::get_boids_spawned()
+float * BoidManager::get_boids_spawned()
 {
 	return &boidsSpawned;
 }
@@ -265,8 +267,26 @@ float * BoidManager::get_seperation_awareness()
 	return& seperation_awareness;
 }
 
+float * BoidManager::setDimension()
+{
+	return& dimension;
+}
+
+Vector3 BoidManager::setDimensionFunction(Boid * _boid)
+{
+	Vector3 setd;
+
+	if (dimension == 1)
+	{		
+	_boid->SetPos(Vector3(_boid->GetPos().x, 0, _boid->GetPos().z));		
+	}
+	return setd;
+}
+
 //float * BoidManager::get_boids_to_spawn()
 //{
 //	return &boids_to_spawn;
 //}
+
+
 

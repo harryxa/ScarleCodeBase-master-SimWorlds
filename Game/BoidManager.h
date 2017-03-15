@@ -29,17 +29,23 @@ public:
 	float* get_sep_mod();
 	float* get_ali_mod();
 	float* get_speed_limit();
-	int* get_boids_spawned();
+	float* get_boids_spawned();
 	float* get_cohesion_awareness();
 	float* get_seperation_awareness();
 	//float* get_boids_to_spawn();
 
+	
+	float* setDimension();
+
+	Vector3 setDimensionFunction(Boid * _boid);
 
 
 	vector<Boid*> GetBoids() { return m_Boids; }
 
 	//int	GetBoidsSpawned() { return m_boidsSpawned; }
 	//void	SetBoidsSpawned(int _boidsSpawned) { m_boidsSpawned = _boidsSpawned; }
+	
+
 
 protected:
 
@@ -55,7 +61,11 @@ private:
 	float cohesion_awareness = 10;
 	float seperation_awareness = 1.5;
 	//float boids_to_spawn = 25;
+	
 
-	int boidsSpawned = 0;
+	float boidsSpawned;
+
+	float dimension = 0;
+	
 };
 
