@@ -28,8 +28,8 @@ void BoidManager::Tick(GameData * _GD)
 
 	//if (_GD->m_dt * 5 > ((float)rand() / (float)RAND_MAX))
 	//{	
-	for (int i = 0; i < number_of_boids; i++)
-	{
+	//for (int i = 0; i < number_of_boids; i++)
+	//{
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 		{
 			if (!(*it)->isAlive())
@@ -44,15 +44,24 @@ void BoidManager::Tick(GameData * _GD)
 				}
 				(*it)->SetVel(Vector3(0, 0, 0));
 
-				if ((*it)->boid_tag == 10)
+
+				//sets one enemy
+				for (int i = 0; i < enemycount; i++)
 				{
-					(*it)->enemy = true;
-					(*it)->SetScale(5);
+					if ((*it)->boid_tag == i)
+					{
+						(*it)->enemy = true;
+						(*it)->SetScale(5);
+					}					
 				}
+				//if ((*it)->enemy == true)
+				//{
+
+				//}
 				break;
 			}
 		}		
-	}
+	//}
 	//}
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)

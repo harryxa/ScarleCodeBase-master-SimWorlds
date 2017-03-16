@@ -80,13 +80,12 @@ private:
 	float alignment_modifier_pred = 3.7;
 
 	float speed_limit = 5;
-
-	//float boids_to_spawn = 25;
 	
 	float boidsSpawned;
 
 	float dimension = 0;
 
-	int number_of_boids = 1000;
+	//int number_of_boids = 1250 - enemycount;
+	float enemycount = 2;
 };
 
