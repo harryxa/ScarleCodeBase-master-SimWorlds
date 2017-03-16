@@ -28,10 +28,10 @@ void BoidManager::Tick(GameData * _GD)
 
 	//if (_GD->m_dt * 5 > ((float)rand() / (float)RAND_MAX))
 	//{	
-	//for (int i = 0; i < number_of_boids; i++)
-	//{
+
 		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 		{
+			//if boid is alive then spawn, increase boidsSpawned count and give a tag
 			if (!(*it)->isAlive())
 			{
 				(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50,  (float)(rand() % 90) - 50 }); //make random number
@@ -44,24 +44,24 @@ void BoidManager::Tick(GameData * _GD)
 				}
 				(*it)->SetVel(Vector3(0, 0, 0));
 
-
-				//sets one enemy
-				for (int i = 0; i < enemycount; i++)
-				{
-					if ((*it)->boid_tag == i)
-					{
-						(*it)->enemy = true;
-						(*it)->SetScale(5);
-					}					
-				}
-				//if ((*it)->enemy == true)
-				//{
-
-				//}
 				break;
 			}
+
+			//sets the number of enemies in the simulation
+			for (int i = -1; i < enemycount; i++)
+			{
+				if ((*it)->boid_tag == i)
+				{
+					(*it)->enemy = true;
+					(*it)->SetScale(5);
+				}
+				if ((*it)->boid_tag >= enemycount)
+				{
+					(*it)->enemy = false;
+					(*it)->SetScale(1);
+				}
+			}
 		}		
-	//}
 	//}
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
@@ -298,6 +298,11 @@ float * BoidManager::get_speed_limit()
 float * BoidManager::get_boids_spawned()
 {
 	return &boidsSpawned;
+}
+
+float * BoidManager::set_pred()
+{
+	return &enemycount;
 }
 
 float * BoidManager::get_cohesion_awareness()

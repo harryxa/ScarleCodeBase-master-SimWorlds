@@ -42,6 +42,7 @@ public:
 
 	float* get_speed_limit();
 	float* get_boids_spawned();
+	float* set_pred();
 
 	//float* get_boids_to_spawn();
 
@@ -86,6 +87,6 @@ private:
 	float dimension = 0;
 
 	//int number_of_boids = 1250 - enemycount;
-	float enemycount = 2;
+	float enemycount = 10;
 };
 
