@@ -174,7 +174,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//text->SetColour(Color((float*)&Colors::Yellow));
 	//m_GameObject2Ds.push_back(text);
 	
-	BoidManager* pBoidManager = new BoidManager(1250, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
+	BoidManager* pBoidManager = new BoidManager(1000, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
 	m_GameObjects.push_back(pBoidManager);
 
 	TwInit(TW_DIRECT3D11, _pd3dDevice);
@@ -204,6 +204,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwAddVarRW(myBar, "CameraYVariable", TW_TYPE_FLOAT, get_cam_y(), "min=50 max= 300 step=10 group=Camera label='Camera Angle'");
 	TwAddVarRW(myBar, "3D/2D", TW_TYPE_FLOAT, pBoidManager->setDimension(), "min=0 max= 1 step=1 group=Dimension label=Dimension label='2D or 3D'");
 	TwAddVarRW(myBar, "PredatorCount", TW_TYPE_FLOAT, pBoidManager->set_pred(), "min=0 max=100 step=1 group='Predator Count' label='Predator Count'");
+	TwAddVarRW(myBar, "BoidCount", TW_TYPE_FLOAT, pBoidManager->set_boid(), "min=0 max=1250 step=1 group='Boid Count' label='Boid Count'");
 
 };
 

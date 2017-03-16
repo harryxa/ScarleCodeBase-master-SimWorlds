@@ -20,6 +20,13 @@ void Boid::Spawn(Vector3 _pos)
 	m_alive = true;
 	m_pos = _pos;
 	//do stuff
+
+}
+
+void Boid::Despawn()
+{
+	m_alive = false;
+	m_pos = Vector3::Zero;
 }
 
 void Boid::Tick(GameData * _GD)

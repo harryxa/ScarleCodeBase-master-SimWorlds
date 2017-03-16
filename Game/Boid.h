@@ -11,11 +11,13 @@ public:
 
 	void Spawn(Vector3 _pos);
 
+	void Despawn();
+
 	virtual void Tick(GameData* _GD) override;
 	virtual void Draw(DrawData* _DD) override;
 
 	bool isAlive() { return m_alive; }
-
+	void setAlive(bool _m_alive) { m_alive = _m_alive; }
 	bool enemy = false;
 	int boid_tag;
 
