@@ -55,8 +55,8 @@ public:
 	//int	GetBoidsSpawned() { return m_boidsSpawned; }
 	//void	SetBoidsSpawned(int _boidsSpawned) { m_boidsSpawned = _boidsSpawned; }
 	
-	int getnumboids() { return number_of_boids; }
-	void setnumberboids(int _number) { number_of_boids = _number; }
+	//int getnumboids() { return number_of_boids; }
+	//void setnumberboids(int _number) { number_of_boids = _number; }
 
 protected:
 
