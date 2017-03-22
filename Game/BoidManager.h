@@ -33,8 +33,7 @@ public:
 	float* get_cohesion_awareness();
 	float* get_seperation_awareness();
 	float* get_scatter();
-
-
+	
 	//getters for pred
 	float* get_coh_mod_pred();
 	float* get_sep_mod_pred();
@@ -43,21 +42,12 @@ public:
 	float* get_speed_limit();
 	float* get_boids_spawned();
 	float* set_pred();
-	float* set_boid();
-	//float* get_boids_to_spawn();
-
 	
 	float* setDimension();
 
 	Vector3 setDimensionFunction(Boid * _boid);
 
 	vector<Boid*> GetBoids() { return m_Boids; }
-
-	//int	GetBoidsSpawned() { return m_boidsSpawned; }
-	//void	SetBoidsSpawned(int _boidsSpawned) { m_boidsSpawned = _boidsSpawned; }
-	
-	//int getnumboids() { return number_of_boids; }
-	//void setnumberboids(int _number) { number_of_boids = _number; }
 
 protected:
 
@@ -86,8 +76,7 @@ private:
 
 	float dimension = 0;
 
-	//int number_of_boids = 1250 - enemycount;
-	float enemycount = 10;
-	float boidcount = 10;
+	float enemycount = 0;
+	
 };
 

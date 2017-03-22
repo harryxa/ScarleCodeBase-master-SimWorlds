@@ -204,7 +204,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwAddVarRW(myBar, "CameraYVariable", TW_TYPE_FLOAT, get_cam_y(), "min=50 max= 300 step=10 group=Camera label='Camera Angle'");
 	TwAddVarRW(myBar, "3D/2D", TW_TYPE_FLOAT, pBoidManager->setDimension(), "min=0 max= 1 step=1 group=Dimension label=Dimension label='2D or 3D'");
 	TwAddVarRW(myBar, "PredatorCount", TW_TYPE_FLOAT, pBoidManager->set_pred(), "min=0 max=100 step=1 group='Predator Count' label='Predator Count'");
-	TwAddVarRW(myBar, "BoidCount", TW_TYPE_FLOAT, pBoidManager->set_boid(), "min=0 max=1250 step=1 group='Boid Count' label='Boid Count'");
+	//TwAddVarRW(myBar, "BoidCount", TW_TYPE_FLOAT, pBoidManager->set_boid(), "min=0 max=1250 step=1 group='Boid Count' label='Boid Count'");
 
 };
 

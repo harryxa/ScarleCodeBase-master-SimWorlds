@@ -2,10 +2,7 @@
 
 Boid::Boid(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF) : CMOGO(_fileName, _pd3dDevice, _EF)
 {
-	m_alive = false;
-
 	m_fudge = Matrix::CreateRotationY(XM_PIDIV4);//gives local rotation
-
 	m_up = Vector3::Transform(Vector3::Up, m_fudge.Invert() * m_worldMat) - m_pos;
 
 }

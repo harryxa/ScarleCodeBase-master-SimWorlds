@@ -26,93 +26,67 @@ void BoidManager::Tick(GameData * _GD)
 {
 	Vector3 forwardMove = Vector3::Forward;
 
-	//if (_GD->m_dt * 5 > ((float)rand() / (float)RAND_MAX))
-	//{	
-
-		for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
+	//spawn boids and assign tags
+	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
+	{
+		//if boid is not alive then spawn, increase boidsSpawned count and give a tag and set to alive in spawn function
+		if ((*it)->isAlive() == false)
 		{
-			
-			//if boid is alive then spawn, increase boidsSpawned count and give a tag
-			if ((*it)->isAlive() == false)
+			for (int tag = 0; tag < boidsSpawned + 1; tag++)
 			{
-				for (int tag = 0; tag < boidsSpawned; tag++)
-				{
-					(*it)->boid_tag = tag;
-				}			
-
-				
-				(*it)->SetVel(Vector3(0, 0, 0));
-
-				//for (int i = 0; i < boidcount; i++)
-				////{
-				//	if ((*it)->boid_tag == i)
-				//	{
-						boidsSpawned++;
-						(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50,  (float)(rand() % 90) - 50 }); //make random number
-				/*	}
-					if ((*it)->boid_tag >= boidcount)
-					{
-						boidsSpawned--;
-						(*it)->Despawn();
-					}*/
-				//}
-				
-				break;
+				(*it)->boid_tag = tag;
 			}
 
-			//for (int i = 0; i < boidcount; i++)
-			//{
-			//	if ((*it)->boid_tag == i)
-			//	{
-			//		(*it)->setAlive(true);
-			//	}
-			//}
 
-			//sets the number of enemies in the simulation
-			for (int i = -1; i < enemycount; i++)
-			{
-				if ((*it)->boid_tag == i)
-				{
-					(*it)->enemy = true;
-					(*it)->SetScale(5);
-				}
-				if ((*it)->boid_tag >= enemycount)
-				{
-					(*it)->enemy = false;
-					(*it)->SetScale(1);
-				}
-			}
-			
+			(*it)->SetVel(Vector3(0, 0, 0));
 
-		
-		}		
-	//}
+			boidsSpawned++;
+			(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50,  (float)(rand() % 90) - 50 }); //make random number
 
+
+			break;
+		}
+
+		if ((*it)->boid_tag <= enemycount)
+		{
+			(*it)->enemy = true;
+			(*it)->SetScale(5);
+		}
+		if ((*it)->boid_tag >= enemycount)
+		{
+			(*it)->enemy = false;
+			(*it)->SetScale(1);
+		}
+	}
+
+	//apply rules to all boids
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it)->isAlive())
 		{
 			if (boidsSpawned > 1)
 			{
-				Vector3 v1_prey, v1_predator, v2_prey, v2_predator,  v3_prey,  v3_predator, v4, v5_prey;
+				Vector3 v1_prey, v1_predator, v2_prey, v2_predator, v3_prey, v3_predator, v4, v5_prey;
 
+				//prey rules
 				v1_prey = Seperation(*it)  * _GD->m_dt / seperation_modifier;
-				v1_predator = Seperation(*it)  * _GD->m_dt / seperation_modifier_pred;
-
 				v2_prey = Cohesion(*it)  * _GD->m_dt / cohesion_modifier;
-				v2_predator = Cohesion(*it)  * _GD->m_dt / cohesion_modifier_pred;
-
 				v3_prey = Alignment(*it)  * _GD->m_dt / alignment_modifier;
+				v5_prey = PreyScatter(*it);
+
+				//preditor rules
+				v1_predator = Seperation(*it)  * _GD->m_dt / seperation_modifier_pred;				
+				v2_predator = Cohesion(*it)  * _GD->m_dt / cohesion_modifier_pred;				
 				v3_predator = Alignment(*it)  * _GD->m_dt / alignment_modifier_pred;
 
-				v4 = BoundPosition(*it);
-				v5_prey = PreyScatter(*it);
+				//shared rules
+				v4 = BoundPosition(*it);				
 
 				if ((*it)->enemy == false)
 				{
 					//sets boid a velocity
 					(*it)->SetVel((*it)->GetVel() + v1_prey + v2_prey + v3_prey + v4 + v5_prey);
-				} 
+				}
 				if ((*it)->enemy == true)
 				{
 					(*it)->SetVel((*it)->GetVel() + v1_predator + v2_predator + v3_predator + v4);
@@ -127,7 +101,6 @@ void BoidManager::Tick(GameData * _GD)
 			(*it)->Tick(_GD);
 		}
 	}
-	
 }
 
 void BoidManager::Draw(DrawData * _DD)
@@ -146,27 +119,27 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	Vector3 CofM = Vector3::Zero;
 	Vector3 cohesion_rule = Vector3::Zero;
 	int close = 0;
-	
+
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it) != _boid && (*it)->isAlive() && (*it)->enemy == false)
 		{
 			//if boids are within 15.0f calculate CofM
 			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < cohesion_awareness)
-			{		
+			{
 				CofM += (*it)->GetPos();
 				close++;
 			}
-		}		
-	}	
+		}
+	}
 
 	if (close > 0)
 	{
 		CofM = CofM / (close); //need to check how many boids are within appropriate distance and divide by that
 		cohesion_rule = (CofM - _boid->GetPos());
 	}
-	if (close < 1 )
-	{		
+	if (close < 1)
+	{
 		cohesion_rule = (CofM - _boid->GetPos()) / 10;
 	}
 
@@ -180,15 +153,15 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it) != _boid)
-		{		
+		{
 			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= seperation_awareness)
 			{
 				seperation_rule -= (*it)->GetPos() - _boid->GetPos();
 			}
 		}
-	}	
-		
-	return seperation_rule;	
+	}
+
+	return seperation_rule;
 }
 
 Vector3 BoidManager::PreyScatter(Boid * _boid)
@@ -206,7 +179,7 @@ Vector3 BoidManager::PreyScatter(Boid * _boid)
 		}
 	}
 
-	return prey_rule/20;
+	return prey_rule / 20;
 }
 
 Vector3 BoidManager::Alignment(Boid * _boid)
@@ -216,7 +189,7 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
 		if ((*it) != _boid)
-		{ 
+		{
 			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= 20.0f)
 			{
 				alignment_rule += (*it)->GetVel();
@@ -234,7 +207,7 @@ void BoidManager::LimitSpeed(Boid * _boid)
 	float vLimit = speed_limit;
 	float bvelocity = fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z);
 
-	if ((fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z) > vLimit ))
+	if ((fabs(_boid->GetVel().x) + fabs(_boid->GetVel().y) + fabs(_boid->GetVel().z) > vLimit))
 	{
 		_boid->SetVel(_boid->GetVel() / bvelocity * vLimit);
 	}
@@ -329,29 +302,25 @@ float * BoidManager::set_pred()
 	return &enemycount;
 }
 
-float * BoidManager::set_boid()
-{
-	return &boidcount;
-}
 
 float * BoidManager::get_cohesion_awareness()
 {
-	return& cohesion_awareness;
+	return&cohesion_awareness;
 }
 
 float * BoidManager::get_seperation_awareness()
 {
-	return& seperation_awareness;
+	return&seperation_awareness;
 }
 
 float * BoidManager::get_scatter()
 {
-	return& prey_scatter_awareness;
+	return&prey_scatter_awareness;
 }
 
 float * BoidManager::setDimension()
 {
-	return& dimension;
+	return&dimension;
 }
 
 Vector3 BoidManager::setDimensionFunction(Boid * _boid)
@@ -359,16 +328,13 @@ Vector3 BoidManager::setDimensionFunction(Boid * _boid)
 	Vector3 setd;
 
 	if (dimension == 1)
-	{		
-	_boid->SetPos(Vector3(_boid->GetPos().x, 0, _boid->GetPos().z));		
+	{
+		_boid->SetPos(Vector3(_boid->GetPos().x, 0, _boid->GetPos().z));
 	}
 	return setd;
 }
 
-//float * BoidManager::get_boids_to_spawn()
-//{
-//	return &boids_to_spawn;
-//}
+
 
 
 
