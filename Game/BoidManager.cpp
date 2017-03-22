@@ -43,19 +43,19 @@ void BoidManager::Tick(GameData * _GD)
 				
 				(*it)->SetVel(Vector3(0, 0, 0));
 
-				for (int i = 0; i < boidcount; i++)
-				{
-					if ((*it)->boid_tag == i)
-					{
+				//for (int i = 0; i < boidcount; i++)
+				////{
+				//	if ((*it)->boid_tag == i)
+				//	{
 						boidsSpawned++;
 						(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50,  (float)(rand() % 90) - 50 }); //make random number
-					}
+				/*	}
 					if ((*it)->boid_tag >= boidcount)
 					{
 						boidsSpawned--;
 						(*it)->Despawn();
-					}
-				}
+					}*/
+				//}
 				
 				break;
 			}
