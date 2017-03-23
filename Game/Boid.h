@@ -18,14 +18,25 @@ public:
 
 	bool isAlive() { return m_alive; }
 	void setAlive(bool _m_alive) { m_alive = _m_alive; }
-	bool enemy = false;
-	int boid_tag;
 
+	bool getEnemy();
+	int getBoid_tag();
+
+	void setBoid_tag(int m_boid_tag) { boid_tag = m_boid_tag; }
+	void setEnemy(bool m_enemy) { enemy = m_enemy; }
 	
 
 protected:
 
 	bool m_alive;
 	Vector3 m_up;
+
+private:
+
+	bool enemy = false;
+	int boid_tag;
+
+
+
 };
 

@@ -49,4 +49,14 @@ void Boid::Draw(DrawData * _DD)
 	}
 }
 
+bool Boid::getEnemy()
+{
+	return false;
+}
+
+int Boid::getBoid_tag()
+{
+	return boid_tag;
+}
+
 

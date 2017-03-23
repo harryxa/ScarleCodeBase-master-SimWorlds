@@ -34,7 +34,7 @@ void BoidManager::Tick(GameData * _GD)
 		{
 			for (int tag = 0; tag < boidsSpawned + 1; tag++)
 			{
-				(*it)->boid_tag = tag;
+				(*it)->setBoid_tag(tag);
 			}
 
 
@@ -47,14 +47,14 @@ void BoidManager::Tick(GameData * _GD)
 			break;
 		}
 
-		if ((*it)->boid_tag <= enemycount)
+		if ((*it)->getBoid_tag() <= enemycount)
 		{
-			(*it)->enemy = true;
+			(*it)->setEnemy(true);
 			(*it)->SetScale(5);
 		}
-		if ((*it)->boid_tag >= enemycount)
+		if ((*it)->getBoid_tag() >= enemycount)
 		{
-			(*it)->enemy = false;
+			(*it)->setEnemy(false);
 			(*it)->SetScale(1);
 		}
 	}
@@ -82,12 +82,12 @@ void BoidManager::Tick(GameData * _GD)
 				//shared rules
 				v4 = BoundPosition(*it);				
 
-				if ((*it)->enemy == false)
+				if ((*it)->getEnemy() == false)
 				{
 					//sets boid a velocity
 					(*it)->SetVel((*it)->GetVel() + v1_prey + v2_prey + v3_prey + v4 + v5_prey);
 				}
-				if ((*it)->enemy == true)
+				if ((*it)->getEnemy() == true)
 				{
 					(*it)->SetVel((*it)->GetVel() + v1_predator + v2_predator + v3_predator + v4);
 				}
@@ -122,7 +122,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
-		if ((*it) != _boid && (*it)->isAlive() && (*it)->enemy == false)
+		if ((*it) != _boid && (*it)->isAlive() && (*it)->getEnemy() == false)
 		{
 			//if boids are within 15.0f calculate CofM
 			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < cohesion_awareness)
@@ -170,7 +170,7 @@ Vector3 BoidManager::PreyScatter(Boid * _boid)
 
 	for (vector<Boid *>::iterator it = m_Boids.begin(); it != m_Boids.end(); it++)
 	{
-		if ((*it)->enemy == true)
+		if ((*it)->getEnemy() == true)
 		{
 			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) <= prey_scatter_awareness)
 			{
