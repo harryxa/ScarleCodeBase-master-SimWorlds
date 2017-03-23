@@ -51,7 +51,7 @@ void Boid::Draw(DrawData * _DD)
 
 bool Boid::getEnemy()
 {
-	return false;
+	return enemy;
 }
 
 int Boid::getBoid_tag()

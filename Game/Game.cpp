@@ -58,7 +58,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_GD = new GameData;
 	m_GD->m_keyboardState = m_keyboardState;
 	m_GD->m_prevKeyboardState = m_prevKeyboardState;
-	m_GD->m_GS = GS_PLAY_TPS_CAM;
+	m_GD->m_GS = GS_PLAY_MAIN_CAM;
 	m_GD->m_mouseState = &m_mouseState;
 
 	//set up DirectXTK Effects system
@@ -94,12 +94,12 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_GameObjects.push_back(m_light);
 
 	//add Player
-	Player* pPlayer = new Player("BirdModelV1.cmo", _pd3dDevice, m_fxFactory);
-	m_GameObjects.push_back(pPlayer);
+	//Player* pPlayer = new Player("BirdModelV1.cmo", _pd3dDevice, m_fxFactory);
+	//m_GameObjects.push_back(pPlayer);
 
 	//add a secondary camera
-	m_TPScam = new TPSCamera(0.25f * XM_PI, AR, 1.0f, 10000.0f, pPlayer, Vector3::UnitY, Vector3(0.0f, 10.0f, 50.0f));
-	m_GameObjects.push_back(m_TPScam);
+	//m_TPScam = new TPSCamera(0.25f * XM_PI, AR, 1.0f, 10000.0f, pPlayer, Vector3::UnitY, Vector3(0.0f, 10.0f, 50.0f));
+	//m_GameObjects.push_back(m_TPScam);
 
 	//create DrawData struct and populate its pointers
 	m_DD = new DrawData;
@@ -174,7 +174,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//text->SetColour(Color((float*)&Colors::Yellow));
 	//m_GameObject2Ds.push_back(text);
 	
-	BoidManager* pBoidManager = new BoidManager(1500, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
+	BoidManager* pBoidManager = new BoidManager(1000, "lowpoly bird.cmo", _pd3dDevice, m_fxFactory);
 	m_GameObjects.push_back(pBoidManager);
 
 	TwInit(TW_DIRECT3D11, _pd3dDevice);
@@ -317,17 +317,17 @@ bool Game::Tick()
 void Game::PlayTick()
 {
 	//upon space bar switch camera state
-	if ((m_keyboardState[DIK_SPACE] & 0x80) && !(m_prevKeyboardState[DIK_SPACE] & 0x80))
-	{
-		if (m_GD->m_GS == GS_PLAY_MAIN_CAM)
-		{
-			m_GD->m_GS = GS_PLAY_TPS_CAM;
-		}
-		else
-		{
-			m_GD->m_GS = GS_PLAY_MAIN_CAM;
-		}
-	}
+	//if ((m_keyboardState[DIK_SPACE] & 0x80) && !(m_prevKeyboardState[DIK_SPACE] & 0x80))
+	//{
+	//	if (m_GD->m_GS == GS_PLAY_MAIN_CAM)
+	//	{
+	//		m_GD->m_GS = GS_PLAY_TPS_CAM;
+	//	}
+	//	else
+	//	{
+	//		m_GD->m_GS = GS_PLAY_MAIN_CAM;
+	//	}
+	//}
 
 	//update all objects
 	for (list<GameObject *>::iterator it = m_GameObjects.begin(); it != m_GameObjects.end(); it++)
