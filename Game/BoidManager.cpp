@@ -37,13 +37,9 @@ void BoidManager::Tick(GameData * _GD)
 				(*it)->setBoid_tag(tag);
 			}
 
-
 			(*it)->SetVel(Vector3(0, 0, 0));
-
 			boidsSpawned++;
 			(*it)->Spawn({ (float)(rand() % 90) - 50 , (float)(rand() % 90) - 50,  (float)(rand() % 90) - 50 }); //make random number
-
-
 			break;
 		}
 
