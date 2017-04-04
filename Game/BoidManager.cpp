@@ -120,7 +120,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	{
 		if ((*it) != _boid && (*it)->isAlive() && (*it)->getEnemy() == false)
 		{
-			//if boids are within 15.0f calculate CofM
+			//if boids are within cohesion awareness, calculate CofM
 			if (fabs(Vector3::Distance((*it)->GetPos(), _boid->GetPos())) < cohesion_awareness)
 			{
 				CofM += (*it)->GetPos();
@@ -131,7 +131,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 
 	if (close > 0)
 	{
-		CofM = CofM / (close); //need to check how many boids are within appropriate distance and divide by that
+		CofM = CofM / (close);
 		cohesion_rule = (CofM - _boid->GetPos());
 	}
 	if (close < 1)
