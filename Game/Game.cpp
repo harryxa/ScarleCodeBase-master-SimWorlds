@@ -241,9 +241,7 @@ bool Game::Tick()
 		break;
 	}
 	
-	
 	m_cam->SetPos(Vector3(0, getcamy(), 200));
-
 	
 	return true;
 };

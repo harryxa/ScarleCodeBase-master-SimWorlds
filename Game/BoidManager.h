@@ -45,7 +45,7 @@ public:
 	
 	float* setDimension();
 
-	Vector3 setDimensionFunction(Boid * _boid);
+	void setDimensionFunction(Boid * _boid);
 
 	vector<Boid*> GetBoids() { return m_Boids; }
 

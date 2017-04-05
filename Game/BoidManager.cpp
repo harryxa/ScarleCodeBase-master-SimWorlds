@@ -156,7 +156,6 @@ Vector3 BoidManager::Seperation(Boid * _boid)
 			}
 		}
 	}
-
 	return seperation_rule;
 }
 
@@ -174,7 +173,6 @@ Vector3 BoidManager::PreyScatter(Boid * _boid)
 			}
 		}
 	}
-
 	return prey_rule / 20;
 }
 
@@ -298,7 +296,6 @@ float * BoidManager::set_pred()
 	return &enemycount;
 }
 
-
 float * BoidManager::get_cohesion_awareness()
 {
 	return&cohesion_awareness;
@@ -319,15 +316,15 @@ float * BoidManager::setDimension()
 	return&dimension;
 }
 
-Vector3 BoidManager::setDimensionFunction(Boid * _boid)
+void BoidManager::setDimensionFunction(Boid * _boid)
 {
-	Vector3 setd;
+	
 
 	if (dimension == 1)
 	{
 		_boid->SetPos(Vector3(_boid->GetPos().x, 0, _boid->GetPos().z));
 	}
-	return setd;
+	
 }
 
 
